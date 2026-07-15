@@ -1,9 +1,7 @@
-package com.cleanarch.wishlist.infrastructore.repository;
+package com.cleanarch.wishlist.infrastructure.repository;
 
-import com.cleanarch.wishlist.infrastructore.persistence.ConfigPropertyDocument;
+import com.cleanarch.wishlist.infrastructure.persistence.ConfigPropertyDocument;
 import org.springframework.data.mongodb.repository.MongoRepository;
-
-import java.util.Optional;
 
 public interface ConfigPropertyRepository extends MongoRepository<ConfigPropertyDocument, String> {
 

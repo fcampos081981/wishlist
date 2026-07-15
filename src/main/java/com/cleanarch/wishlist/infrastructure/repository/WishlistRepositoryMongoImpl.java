@@ -1,9 +1,9 @@
-package com.cleanarch.wishlist.infrastructore.repository;
+package com.cleanarch.wishlist.infrastructure.repository;
 
 import com.cleanarch.wishlist.domain.entity.Wishlist;
 import com.cleanarch.wishlist.domain.repositorie.WishlistRepository;
-import com.cleanarch.wishlist.infrastructore.persistence.WhishlistMapper;
-import com.cleanarch.wishlist.infrastructore.persistence.WishlistDocument;
+import com.cleanarch.wishlist.infrastructure.persistence.WhishlistMapper;
+import com.cleanarch.wishlist.infrastructure.persistence.WishlistDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
@@ -66,4 +66,10 @@ public class WishlistRepositoryMongoImpl implements WishlistRepository {
 
         return whishlistMapper.toDomain(saved);
     }
+
+    @Override
+    public void deleteByCustomerId(String customerId) {
+        mongoRepo.deleteByCustomerId(customerId);
+    }
+
 }

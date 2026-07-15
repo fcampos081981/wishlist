@@ -1,4 +1,4 @@
-package com.cleanarch.wishlist.infrastructore.persistence;
+package com.cleanarch.wishlist.infrastructure.persistence;
 
 import com.cleanarch.wishlist.domain.vo.ProductId;
 import org.mapstruct.Mapper;

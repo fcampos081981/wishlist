@@ -1,4 +1,4 @@
-package com.cleanarch.wishlist.infrastructore.persistence;
+package com.cleanarch.wishlist.infrastructure.persistence;
 
 import lombok.Getter;
 import lombok.Setter;

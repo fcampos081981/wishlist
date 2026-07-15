@@ -1,6 +1,6 @@
 package com.cleanarch.wishlist.application.config;
 
-import com.cleanarch.wishlist.infrastructore.persistence.ConfigPropertyDocument;
+import com.cleanarch.wishlist.infrastructure.persistence.ConfigPropertyDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;

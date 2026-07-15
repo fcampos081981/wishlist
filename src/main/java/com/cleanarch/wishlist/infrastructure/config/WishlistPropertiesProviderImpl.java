@@ -1,8 +1,8 @@
-package com.cleanarch.wishlist.infrastructore.config;
+package com.cleanarch.wishlist.infrastructure.config;
 
 import com.cleanarch.wishlist.application.config.WishlistPropertiesProvider;
-import com.cleanarch.wishlist.infrastructore.persistence.ConfigPropertyDocument;
-import com.cleanarch.wishlist.infrastructore.repository.ConfigPropertyRepository;
+import com.cleanarch.wishlist.infrastructure.persistence.ConfigPropertyDocument;
+import com.cleanarch.wishlist.infrastructure.repository.ConfigPropertyRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;

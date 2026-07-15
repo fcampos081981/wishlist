@@ -21,5 +21,4 @@ public record ProductId(String value) {
         return value;
     }
 
-
 }
