@@ -1,26 +1,34 @@
 package com.cleanarch.wishlist.infrastructore.persistence;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Document(collection = "wishlists")
 @Getter
 @Setter
-@NoArgsConstructor
 public class WishlistDocument {
-    @Id
+
+    @MongoId(targetType = FieldType.STRING)
     private String id;
+
+    @Indexed(unique = true)
     private String customerId;
-    private Set<String> productIds;
+
+    private Set<String> productIds = new HashSet<>();
+
+    public WishlistDocument() {
+    }
 
     public WishlistDocument(String id, String customerId, Set<String> productIds) {
         this.id = id;
         this.customerId = customerId;
-        this.productIds = productIds;
+        this.productIds = productIds != null ? productIds : new HashSet<>();
     }
 }

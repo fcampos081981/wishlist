@@ -8,5 +8,5 @@ public interface WishlistRepository {
 
    Optional<Wishlist> findByCustomerId(String customerId);
 
-   void save(Wishlist wishlist);
+   Wishlist save(Wishlist wishlist);
 }

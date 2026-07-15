@@ -10,7 +10,7 @@ import com.cleanarch.wishlist.domain.repositorie.WishlistRepository;
 public class WhislistConfig {
 
     @Bean
-    public WishlistUseCase wishlistUseCase(WishlistRepository wishlistRepository) {
-        return new WishlistUseCase(wishlistRepository);
+    public WishlistUseCase wishlistUseCase(WishlistRepository wishlistRepository, WishlistPropertiesProvider wishlistPropertiesProvider) {
+        return new WishlistUseCase(wishlistRepository, wishlistPropertiesProvider);
     }
 }

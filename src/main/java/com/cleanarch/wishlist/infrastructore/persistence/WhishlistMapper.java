@@ -20,7 +20,7 @@ public interface WhishlistMapper {
     default Set<String> map(Set<ProductId> value){
         if(value == null) return null;
 
-        return value.stream().map(ProductId::toString).collect(Collectors.toSet());
+        return value.stream().map(ProductId::value).collect(Collectors.toSet());
     }
 
     default Set<ProductId> mapToProductId(Set<String> value) {
