@@ -40,9 +40,13 @@ class DtoTest {
     }
 
     @Test
-    void errorResponse_shouldExposeMessage() {
-        ErrorResponse errorResponse = new ErrorResponse("Something went wrong");
+    void erroResponseDto_shouldExposeMessage() {
+        ErroResponseDTO errorResponse = new ErroResponseDTO("Something went wrong");
 
-        assertThat(errorResponse.message()).isEqualTo("Something went wrong");
+        assertThat(errorResponse.getMessage()).isEqualTo("Something went wrong");
+
+        errorResponse.setMessage("Updated message");
+
+        assertThat(errorResponse.getMessage()).isEqualTo("Updated message");
     }
 }

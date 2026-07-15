@@ -1,7 +1,7 @@
 package com.cleanarch.wishlist.interfaces.api.controller;
 
 import com.cleanarch.wishlist.application.dto.ProductIdsResponse;
-import com.cleanarch.wishlist.application.usecase.WishlistUseCase;
+import com.cleanarch.wishlist.application.usecase.WishlistUseCaseImpl;
 import com.cleanarch.wishlist.domain.exception.BusinesException;
 import com.cleanarch.wishlist.domain.exception.NotFoundException;
 import com.cleanarch.wishlist.interfaces.handler.GlobalExceptionHandler;
@@ -27,6 +27,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(WhislistController.class)
 @Import(GlobalExceptionHandler.class)
+@org.springframework.test.context.TestPropertySource(properties = {
+        "spring.mvc.throw-exception-if-no-handler-found=true",
+        "spring.web.resources.add-mappings=false"
+})
 class WhislistControllerTest {
 
     private static final String CUSTOMER_ID = "customer-1";
@@ -36,7 +40,7 @@ class WhislistControllerTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private WishlistUseCase wishlistUseCase;
+    private WishlistUseCaseImpl wishlistUseCase;
 
     @Test
     void addProduct_shouldReturnCreated() throws Exception {
@@ -89,6 +93,16 @@ class WhislistControllerTest {
     }
 
     @Test
+    void removeCustomerWishlist_shouldReturnNotFoundWhenWishlistMissing() throws Exception {
+        doThrow(new NotFoundException("Wishlist not found!"))
+                .when(wishlistUseCase).removeCustomerWishlist(CUSTOMER_ID);
+
+        mockMvc.perform(delete("/api/wishlists/{customerId}", CUSTOMER_ID))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Wishlist not found!"));
+    }
+
+    @Test
     void getAllProducts_shouldReturnProducts() throws Exception {
         when(wishlistUseCase.getAllProducts(CUSTOMER_ID))
                 .thenReturn(new ProductIdsResponse(Set.of(PRODUCT_ID)));
@@ -99,5 +113,25 @@ class WhislistControllerTest {
                 .andExpect(jsonPath("$.message").value("Success"))
                 .andExpect(jsonPath("$.statusCode").value(200))
                 .andExpect(jsonPath("$.data.product_ids[0]").value(PRODUCT_ID));
+    }
+
+    @Test
+    void getAllProducts_shouldReturnEmptyListWhenNoProducts() throws Exception {
+        when(wishlistUseCase.getAllProducts(CUSTOMER_ID))
+                .thenReturn(new ProductIdsResponse(Set.of()));
+
+        mockMvc.perform(get("/api/wishlists/{customerId}/products", CUSTOMER_ID)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Success"))
+                .andExpect(jsonPath("$.statusCode").value(200))
+                .andExpect(jsonPath("$.data.product_ids").isEmpty());
+    }
+
+    @Test
+    void unknownEndpoint_shouldReturnBadRequest() throws Exception {
+        mockMvc.perform(get("/api/unknown"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("The required parameter is not in the path."));
     }
 }

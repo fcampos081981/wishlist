@@ -2,15 +2,11 @@ package com.cleanarch.wishlist.interfaces.api.controller;
 
 import com.cleanarch.wishlist.application.dto.ProductIdsResponse;
 import com.cleanarch.wishlist.application.usecase.WishlistUseCase;
-import com.cleanarch.wishlist.domain.vo.ProductId;
 import com.cleanarch.wishlist.interfaces.api.dto.ProductIdsResponseDTO;
 import com.cleanarch.wishlist.interfaces.api.dto.ResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Set;
-
 
 @RestController
 @RequestMapping("/api/wishlists")

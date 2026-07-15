@@ -26,7 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class WishlistUseCaseTest {
+class WishlistUseCaseImplTest {
 
     private static final String CUSTOMER_ID = "customer-1";
     private static final String PRODUCT_ID = "product-1";
@@ -38,7 +38,7 @@ class WishlistUseCaseTest {
     private WishlistPropertiesProvider propertiesProvider;
 
     @InjectMocks
-    private WishlistUseCase wishlistUseCase;
+    private WishlistUseCaseImpl wishlistUseCase;
 
     @Test
     void addProduct_shouldCreateWishlistWhenNotExists() {
