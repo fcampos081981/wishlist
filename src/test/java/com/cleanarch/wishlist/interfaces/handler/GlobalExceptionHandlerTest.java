@@ -38,4 +38,13 @@ class GlobalExceptionHandlerTest {
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().message()).isEqualTo("Resource not found");
     }
+
+    @Test
+    void handleIllegalArgumentException_shouldReturnBadRequest() {
+        ResponseEntity<String> response = handler.handleIllegalArgumentException(
+                new IllegalArgumentException("customerId cannot be a null or empty"));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).isEqualTo("Invalid argument: customerId cannot be a null or empty");
+    }
 }

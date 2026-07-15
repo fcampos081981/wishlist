@@ -98,6 +98,42 @@ class WishlistUseCaseTest {
     }
 
     @Test
+    void addProduct_shouldThrowWhenCustomerIdIsNull() {
+        assertThatThrownBy(() -> wishlistUseCase.addProduct(null, PRODUCT_ID))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("customerId cannot be a null or empty");
+
+        verify(wishlistRepository, never()).save(any());
+    }
+
+    @Test
+    void addProduct_shouldThrowWhenCustomerIdIsEmpty() {
+        assertThatThrownBy(() -> wishlistUseCase.addProduct("", PRODUCT_ID))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("customerId cannot be a null or empty");
+
+        verify(wishlistRepository, never()).save(any());
+    }
+
+    @Test
+    void addProduct_shouldThrowWhenProductIdIsNull() {
+        assertThatThrownBy(() -> wishlistUseCase.addProduct(CUSTOMER_ID, null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("productId cannot be a null or empty");
+
+        verify(wishlistRepository, never()).save(any());
+    }
+
+    @Test
+    void addProduct_shouldThrowWhenProductIdIsEmpty() {
+        assertThatThrownBy(() -> wishlistUseCase.addProduct(CUSTOMER_ID, ""))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("productId cannot be a null or empty");
+
+        verify(wishlistRepository, never()).save(any());
+    }
+
+    @Test
     void removeProduct_shouldRemoveProductFromWishlist() {
         Wishlist existing = new Wishlist("id-1", CUSTOMER_ID, new HashSet<>(Set.of(new ProductId(PRODUCT_ID))));
         when(wishlistRepository.findByCustomerId(CUSTOMER_ID)).thenReturn(Optional.of(existing));

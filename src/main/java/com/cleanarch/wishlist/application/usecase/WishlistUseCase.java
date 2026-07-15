@@ -25,7 +25,22 @@ public class WishlistUseCase {
         this.prop = wishlistPropertiesProvider;
     }
 
+    private void validateCustomerId(String customerId) {
+        if (customerId == null || customerId.isEmpty()) {
+            throw new IllegalArgumentException("customerId cannot be a null or empty");
+        }
+    }
+
+    private void validateProductId(String productId) {
+        if (productId == null || productId.isEmpty()) {
+            throw new IllegalArgumentException("productId cannot be a null or empty");
+        }
+    }
+
     public void addProduct(String customerId, String productId) {
+        validateCustomerId(customerId);
+        validateProductId(productId);
+
         Wishlist wishlist = wishlistRepository
                 .findByCustomerId(customerId)
                 .orElse(new Wishlist(null, customerId, new HashSet<>()));
@@ -35,7 +50,7 @@ public class WishlistUseCase {
         }
 
         int maxProducts = prop.getMaxProducts();
-        if (wishlist.canAddProduct(maxProducts)) {
+        if (!wishlist.canAddProduct(maxProducts)) {
             throw new BusinesException("Wishlist size limit exceeded! Max size: " + maxProducts);
         }
 

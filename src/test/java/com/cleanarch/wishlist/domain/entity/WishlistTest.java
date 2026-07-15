@@ -41,4 +41,35 @@ class WishlistTest {
         assertThat(wishlist.getCustomerId()).isEqualTo("customer-1");
         assertThat(wishlist.getProductIds()).containsExactly(new ProductId("product-1"));
     }
+
+    @Test
+    void canAddProduct_shouldReturnTrueWhenBelowLimit() {
+        Wishlist wishlist = new Wishlist("id-1", "customer-1", new HashSet<>(Set.of(new ProductId("product-1"))));
+
+        assertThat(wishlist.canAddProduct(2)).isTrue();
+    }
+
+    @Test
+    void canAddProduct_shouldReturnFalseWhenAtLimit() {
+        Wishlist wishlist = new Wishlist("id-1", "customer-1", new HashSet<>(Set.of(
+                new ProductId("product-1"),
+                new ProductId("product-2")
+        )));
+
+        assertThat(wishlist.canAddProduct(2)).isFalse();
+    }
+
+    @Test
+    void containsProduct_shouldReturnTrueWhenProductExists() {
+        Wishlist wishlist = new Wishlist("id-1", "customer-1", new HashSet<>(Set.of(new ProductId("product-1"))));
+
+        assertThat(wishlist.containsProduct(new ProductId("product-1"))).isTrue();
+    }
+
+    @Test
+    void containsProduct_shouldReturnFalseWhenProductDoesNotExist() {
+        Wishlist wishlist = new Wishlist("id-1", "customer-1", new HashSet<>());
+
+        assertThat(wishlist.containsProduct(new ProductId("product-1"))).isFalse();
+    }
 }
