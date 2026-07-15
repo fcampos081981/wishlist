@@ -30,12 +30,12 @@ public class WishlistUseCase {
                 .findByCustomerId(customerId)
                 .orElse(new Wishlist(null, customerId, new HashSet<>()));
 
-        if (wishlist.getProductIds().contains(new ProductId(productId))) {
+        if (wishlist.containsProduct(new ProductId(productId))) {
             throw new BusinesException("Product already in wishlist!");
         }
 
         int maxProducts = prop.getMaxProducts();
-        if (wishlist.getProductIds().size() >= maxProducts) {
+        if (wishlist.canAddProduct(maxProducts)) {
             throw new BusinesException("Wishlist size limit exceeded! Max size: " + maxProducts);
         }
 
