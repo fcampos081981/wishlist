@@ -25,13 +25,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(WhislistController.class)
+@WebMvcTest(WishlistController.class)
 @Import(GlobalExceptionHandler.class)
 @org.springframework.test.context.TestPropertySource(properties = {
         "spring.mvc.throw-exception-if-no-handler-found=true",
         "spring.web.resources.add-mappings=false"
 })
-class WhislistControllerTest {
+class WishlistControllerTest {
 
     private static final String CUSTOMER_ID = "customer-1";
     private static final String PRODUCT_ID = "product-1";

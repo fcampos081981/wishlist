@@ -1,5 +1,6 @@
 package com.cleanarch.wishlist.application.config;
 
+import com.cleanarch.wishlist.infrastructure.config.OpenApiConfig;
 import io.swagger.v3.oas.models.OpenAPI;
 import org.junit.jupiter.api.Test;
 

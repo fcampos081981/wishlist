@@ -10,23 +10,23 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/wishlists")
-public class WhislistController {
+public class WishlistController {
 
     private final WishlistUseCase wishlistUseCase;
 
-    public WhislistController(WishlistUseCase wishlistUseCase) {
+    public WishlistController(WishlistUseCase wishlistUseCase) {
         this.wishlistUseCase = wishlistUseCase;
     }
 
-    @PostMapping("/{customerId}/products/{productsId}")
-    public ResponseEntity<Void> addProduct(@PathVariable String customerId, @PathVariable String productsId) {
-        wishlistUseCase.addProduct(customerId, productsId);
+    @PostMapping("/{customerId}/products/{productId}")
+    public ResponseEntity<Void> addProduct(@PathVariable String customerId, @PathVariable String productId) {
+        wishlistUseCase.addProduct(customerId, productId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @DeleteMapping("/{customerId}/products/{productsId}")
-    public ResponseEntity<Void> removeProduct(@PathVariable String customerId, @PathVariable String productsId) {
-        wishlistUseCase.removeProduct(customerId, productsId);
+    @DeleteMapping("/{customerId}/products/{productId}")
+    public ResponseEntity<Void> removeProduct(@PathVariable String customerId, @PathVariable String productId) {
+        wishlistUseCase.removeProduct(customerId, productId);
         return ResponseEntity.noContent().build();
     }
 

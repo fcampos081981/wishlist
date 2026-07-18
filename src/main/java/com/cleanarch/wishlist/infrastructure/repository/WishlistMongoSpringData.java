@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
 
-public interface WhislistMongoSpringData extends MongoRepository<WishlistDocument, String> {
+public interface WishlistMongoSpringData extends MongoRepository<WishlistDocument, String> {
    Optional<WishlistDocument> findByCustomerId(String customerId);
 
    void deleteByCustomerId(String customerId);

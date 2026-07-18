@@ -1,6 +1,7 @@
 package com.cleanarch.wishlist.application.config;
 
 import com.cleanarch.wishlist.infrastructure.persistence.ConfigPropertyDocument;
+import com.cleanarch.wishlist.infrastructure.config.MongoCollectionInitializer;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;

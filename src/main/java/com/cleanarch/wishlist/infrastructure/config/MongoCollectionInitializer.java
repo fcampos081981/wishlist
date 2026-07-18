@@ -1,4 +1,4 @@
-package com.cleanarch.wishlist.application.config;
+package com.cleanarch.wishlist.infrastructure.config;
 
 import com.cleanarch.wishlist.infrastructure.persistence.ConfigPropertyDocument;
 import org.slf4j.Logger;

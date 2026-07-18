@@ -9,9 +9,9 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class WhishlistMapperTest {
+class WishlistMapperTest {
 
-    private final WhishlistMapper mapper = new WhishlistMapperImpl();
+    private final WishlistMapper mapper = new WishlistMapperImpl();
 
     @Test
     void toDocument_shouldMapAllFields() {

@@ -2,7 +2,7 @@ package com.cleanarch.wishlist.infrastructure.repository;
 
 import com.cleanarch.wishlist.domain.entity.Wishlist;
 import com.cleanarch.wishlist.domain.repositorie.WishlistRepository;
-import com.cleanarch.wishlist.infrastructure.persistence.WhishlistMapper;
+import com.cleanarch.wishlist.infrastructure.persistence.WishlistMapper;
 import com.cleanarch.wishlist.infrastructure.persistence.WishlistDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,28 +21,28 @@ public class WishlistRepositoryMongoImpl implements WishlistRepository {
 
     private static final Logger log = LoggerFactory.getLogger(WishlistRepositoryMongoImpl.class);
 
-    private final WhislistMongoSpringData mongoRepo;
-    private final WhishlistMapper whishlistMapper;
+    private final WishlistMongoSpringData mongoRepo;
+    private final WishlistMapper wishlistMapper;
     private final MongoTemplate mongoTemplate;
 
     public WishlistRepositoryMongoImpl(
-            WhislistMongoSpringData mongoRepo,
-            WhishlistMapper whishlistMapper,
+            WishlistMongoSpringData mongoRepo,
+            WishlistMapper wishlistMapper,
             MongoTemplate mongoTemplate) {
         this.mongoRepo = mongoRepo;
-        this.whishlistMapper = whishlistMapper;
+        this.wishlistMapper = wishlistMapper;
         this.mongoTemplate = mongoTemplate;
     }
 
     @Override
     public Optional<Wishlist> findByCustomerId(String customerId) {
         return mongoRepo.findByCustomerId(customerId)
-                .map(whishlistMapper::toDomain);
+                .map(wishlistMapper::toDomain);
     }
 
     @Override
     public Wishlist save(Wishlist wishlist) {
-        WishlistDocument incoming = whishlistMapper.toDocument(wishlist);
+        WishlistDocument incoming = wishlistMapper.toDocument(wishlist);
 
         Query byCustomer = Query.query(Criteria.where("customerId").is(wishlist.getCustomerId()));
         Update update = new Update()
@@ -64,7 +64,7 @@ public class WishlistRepositoryMongoImpl implements WishlistRepository {
                 wishlist.getCustomerId(),
                 incoming.getProductIds());
 
-        return whishlistMapper.toDomain(saved);
+        return wishlistMapper.toDomain(saved);
     }
 
     @Override

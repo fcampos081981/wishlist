@@ -35,6 +35,7 @@
 		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 		<springdoc.version>3.0.3</springdoc.version>
 		<jacoco.version>0.8.15</jacoco.version>
+		<cucumber.version>7.34.4</cucumber.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -105,6 +106,29 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-suite</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit-platform-engine</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-spring</artifactId>
+			<version>${cucumber.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -196,7 +220,7 @@
 						<exclude>**/WishlistApplication.class</exclude>
 						<exclude>**/WishlistRepository.class</exclude>
 						<exclude>**/WishlistPropertiesProvider.class</exclude>
-						<exclude>**/WhislistMongoSpringData.class</exclude>
+						<exclude>**/WishlistMongoSpringData.class</exclude>
 						<exclude>**/ConfigPropertyRepository.class</exclude>
 						<exclude>**/ConversionServiceAdapter.class</exclude>
 					</excludes>

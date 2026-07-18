@@ -3,6 +3,7 @@ package com.cleanarch.wishlist.application.config;
 import com.cleanarch.wishlist.application.usecase.WishlistUseCase;
 import com.cleanarch.wishlist.application.usecase.WishlistUseCaseImpl;
 import com.cleanarch.wishlist.domain.repositorie.WishlistRepository;
+import com.cleanarch.wishlist.infrastructure.config.WishlistConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -11,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-class WhislistConfigTest {
+class WishlistConfigTest {
 
     @Mock
     private WishlistRepository wishlistRepository;
@@ -19,7 +20,7 @@ class WhislistConfigTest {
     @Mock
     private WishlistPropertiesProvider wishlistPropertiesProvider;
 
-    private final WhislistConfig config = new WhislistConfig();
+    private final WishlistConfig config = new WishlistConfig();
 
     @Test
     void wishlistUseCase_shouldCreateUseCaseBean() {

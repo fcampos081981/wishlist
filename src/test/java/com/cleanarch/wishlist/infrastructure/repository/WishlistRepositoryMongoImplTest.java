@@ -2,7 +2,7 @@ package com.cleanarch.wishlist.infrastructure.repository;
 
 import com.cleanarch.wishlist.domain.entity.Wishlist;
 import com.cleanarch.wishlist.domain.vo.ProductId;
-import com.cleanarch.wishlist.infrastructure.persistence.WhishlistMapper;
+import com.cleanarch.wishlist.infrastructure.persistence.WishlistMapper;
 import com.cleanarch.wishlist.infrastructure.persistence.WishlistDocument;
 import com.mongodb.client.MongoDatabase;
 import org.junit.jupiter.api.Test;
@@ -31,10 +31,10 @@ class WishlistRepositoryMongoImplTest {
     private static final String CUSTOMER_ID = "customer-1";
 
     @Mock
-    private WhislistMongoSpringData mongoRepo;
+    private WishlistMongoSpringData mongoRepo;
 
     @Mock
-    private WhishlistMapper whishlistMapper;
+    private WishlistMapper wishlistMapper;
 
     @Mock
     private MongoTemplate mongoTemplate;
@@ -51,7 +51,7 @@ class WishlistRepositoryMongoImplTest {
         Wishlist wishlist = new Wishlist("id-1", CUSTOMER_ID, new HashSet<>(Set.of(new ProductId("product-1"))));
 
         when(mongoRepo.findByCustomerId(CUSTOMER_ID)).thenReturn(Optional.of(document));
-        when(whishlistMapper.toDomain(document)).thenReturn(wishlist);
+        when(wishlistMapper.toDomain(document)).thenReturn(wishlist);
 
         Optional<Wishlist> result = repository.findByCustomerId(CUSTOMER_ID);
 
@@ -74,14 +74,14 @@ class WishlistRepositoryMongoImplTest {
         WishlistDocument savedDocument = new WishlistDocument("id-1", CUSTOMER_ID, Set.of("product-1"));
         Wishlist savedWishlist = new Wishlist("id-1", CUSTOMER_ID, new HashSet<>(Set.of(new ProductId("product-1"))));
 
-        when(whishlistMapper.toDocument(wishlist)).thenReturn(incoming);
+        when(wishlistMapper.toDocument(wishlist)).thenReturn(incoming);
         when(mongoTemplate.findAndModify(
                 any(Query.class),
                 any(Update.class),
                 any(FindAndModifyOptions.class),
                 eq(WishlistDocument.class)
         )).thenReturn(savedDocument);
-        when(whishlistMapper.toDomain(savedDocument)).thenReturn(savedWishlist);
+        when(wishlistMapper.toDomain(savedDocument)).thenReturn(savedWishlist);
         when(mongoTemplate.getDb()).thenReturn(mongoDatabase);
         when(mongoDatabase.getName()).thenReturn("wishlist-db");
 
@@ -101,14 +101,14 @@ class WishlistRepositoryMongoImplTest {
         Wishlist wishlist = new Wishlist(null, CUSTOMER_ID, new HashSet<>(Set.of(new ProductId("product-1"))));
         WishlistDocument incoming = new WishlistDocument(null, CUSTOMER_ID, Set.of("product-1"));
 
-        when(whishlistMapper.toDocument(wishlist)).thenReturn(incoming);
+        when(wishlistMapper.toDocument(wishlist)).thenReturn(incoming);
         when(mongoTemplate.findAndModify(
                 any(Query.class),
                 any(Update.class),
                 any(FindAndModifyOptions.class),
                 eq(WishlistDocument.class)
         )).thenReturn(null);
-        when(whishlistMapper.toDomain(null)).thenReturn(null);
+        when(wishlistMapper.toDomain(null)).thenReturn(null);
         when(mongoTemplate.getDb()).thenReturn(mongoDatabase);
         when(mongoDatabase.getName()).thenReturn("wishlist-db");
 

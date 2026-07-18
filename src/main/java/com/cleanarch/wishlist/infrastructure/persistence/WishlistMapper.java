@@ -10,8 +10,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
-public interface WhishlistMapper {
-    WhishlistMapper INSTANCE = Mappers.getMapper(WhishlistMapper.class);
+public interface WishlistMapper {
+    WishlistMapper INSTANCE = Mappers.getMapper(WishlistMapper.class);
 
     WishlistDocument toDocument(Wishlist wishlist);
 

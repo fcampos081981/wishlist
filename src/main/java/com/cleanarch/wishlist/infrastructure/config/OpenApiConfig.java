@@ -1,4 +1,4 @@
-package com.cleanarch.wishlist.application.config;
+package com.cleanarch.wishlist.infrastructure.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
