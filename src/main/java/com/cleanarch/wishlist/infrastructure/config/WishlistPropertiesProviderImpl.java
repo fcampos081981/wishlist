@@ -1,8 +1,9 @@
 package com.cleanarch.wishlist.infrastructure.config;
 
 import com.cleanarch.wishlist.application.config.WishlistPropertiesProvider;
+import com.cleanarch.wishlist.domain.repositorie.ConfigPropertyRepository;
 import com.cleanarch.wishlist.infrastructure.persistence.ConfigPropertyDocument;
-import com.cleanarch.wishlist.infrastructure.repository.ConfigPropertyMongoSpringData;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -11,25 +12,25 @@ import org.springframework.stereotype.Component;
 public class WishlistPropertiesProviderImpl implements WishlistPropertiesProvider {
 
     private static final Logger LOGGER = LogManager.getLogger(WishlistPropertiesProviderImpl.class);
-    private final ConfigPropertyMongoSpringData configRepo;
+    private final ConfigPropertyRepository configRepo;
 
-    public WishlistPropertiesProviderImpl(ConfigPropertyMongoSpringData configRepo) {
+    public WishlistPropertiesProviderImpl(ConfigPropertyRepository configRepo) {
         this.configRepo = configRepo;
     }
 
     @Override
     public int getMaxProducts() {
         LOGGER.info("Finding max maxProducts in Config Repository");
-        ConfigPropertyDocument prop = configRepo.findByKey("wishlist.maxProducts");
+        String value = configRepo.findValueByKey("wishlist.maxProducts");
 
-        if (prop != null && prop.getValue() != null) {
+        if (value != null) {
             try {
-                return Integer.parseInt(prop.getValue());
+                return Integer.parseInt(value);
             } catch (NumberFormatException e) {
-                LOGGER.warn("Value found for maxProducts {}", prop.getValue());
+                LOGGER.warn("Value found for maxProducts {}", value);
             }
         }
 
-        return 20;
+        return 5;
     }
 }

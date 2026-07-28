@@ -20,4 +20,6 @@ public class ConfigPropertyMongoRepository implements ConfigPropertyRepository {
         ConfigPropertyDocument doc = mongoRepo.findByKey(key);
         return doc != null ? doc.getValue() : null;
     }
+
+
 }
