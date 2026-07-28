@@ -5,12 +5,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 @Component
+@ConditionalOnProperty(name = "wishlist.repository.type", havingValue = "mongo")
 public class MongoCollectionInitializer implements ApplicationRunner {
 
     private static final Logger log = LoggerFactory.getLogger(MongoCollectionInitializer.class);

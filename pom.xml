@@ -146,6 +146,11 @@
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
     </dependencies>
 
 	<build>
@@ -236,6 +241,9 @@
 						<exclude>**/WishlistRepository.class</exclude>
 						<exclude>**/WishlistPropertiesProvider.class</exclude>
 						<exclude>**/WishlistMongoSpringData.class</exclude>
+						<exclude>**/WishlistPostgresqlSprinData.class</exclude>
+						<exclude>**/ConfigPropertyPostgresqlSpringDate.class</exclude>
+						<exclude>**/ConfigPropertyMongoSpringData.class</exclude>
 						<exclude>**/ConfigPropertyRepository.class</exclude>
 						<exclude>**/ConversionServiceAdapter.class</exclude>
 					</excludes>

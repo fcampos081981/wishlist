@@ -68,11 +68,10 @@ class WishlistRepositoryMongoImplTest {
     }
 
     @Test
-    void save_shouldUpsertAndReturnDomain() {
+    void save_shouldUpsertDocument() {
         Wishlist wishlist = new Wishlist(null, CUSTOMER_ID, new HashSet<>(Set.of(new ProductId("product-1"))));
         WishlistDocumentMongo incoming = new WishlistDocumentMongo(null, CUSTOMER_ID, Set.of("product-1"));
         WishlistDocumentMongo savedDocument = new WishlistDocumentMongo("id-1", CUSTOMER_ID, Set.of("product-1"));
-        Wishlist savedWishlist = new Wishlist("id-1", CUSTOMER_ID, new HashSet<>(Set.of(new ProductId("product-1"))));
 
         when(wishlistMapper.toDocument(wishlist)).thenReturn(incoming);
         when(mongoTemplate.findAndModify(
@@ -81,13 +80,11 @@ class WishlistRepositoryMongoImplTest {
                 any(FindAndModifyOptions.class),
                 eq(WishlistDocumentMongo.class)
         )).thenReturn(savedDocument);
-        when(wishlistMapper.toDomain(savedDocument)).thenReturn(savedWishlist);
         when(mongoTemplate.getDb()).thenReturn(mongoDatabase);
         when(mongoDatabase.getName()).thenReturn("wishlist-db");
 
-        Wishlist result = repository.save(wishlist);
+        repository.save(wishlist);
 
-        assertThat(result).isEqualTo(savedWishlist);
         verify(mongoTemplate).findAndModify(
                 any(Query.class),
                 any(Update.class),
@@ -108,13 +105,17 @@ class WishlistRepositoryMongoImplTest {
                 any(FindAndModifyOptions.class),
                 eq(WishlistDocumentMongo.class)
         )).thenReturn(null);
-        when(wishlistMapper.toDomain(null)).thenReturn(null);
         when(mongoTemplate.getDb()).thenReturn(mongoDatabase);
         when(mongoDatabase.getName()).thenReturn("wishlist-db");
 
-        Wishlist result = repository.save(wishlist);
+        repository.save(wishlist);
 
-        assertThat(result).isNull();
+        verify(mongoTemplate).findAndModify(
+                any(Query.class),
+                any(Update.class),
+                any(FindAndModifyOptions.class),
+                eq(WishlistDocumentMongo.class)
+        );
     }
 
     @Test

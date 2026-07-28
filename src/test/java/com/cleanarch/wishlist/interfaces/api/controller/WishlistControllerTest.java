@@ -29,7 +29,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(GlobalExceptionHandler.class)
 @org.springframework.test.context.TestPropertySource(properties = {
         "spring.mvc.throw-exception-if-no-handler-found=true",
-        "spring.web.resources.add-mappings=false"
+        "spring.web.resources.add-mappings=false",
+        "wishlist.repository.type=none",
+        "spring.autoconfigure.exclude=org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration,org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration,org.springframework.boot.data.jpa.autoconfigure.DataJpaRepositoriesAutoConfiguration,org.springframework.boot.mongodb.autoconfigure.MongoAutoConfiguration,org.springframework.boot.data.mongodb.autoconfigure.DataMongoAutoConfiguration"
 })
 class WishlistControllerTest {
 
