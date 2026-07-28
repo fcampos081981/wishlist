@@ -1,6 +1,7 @@
 package com.cleanarch.wishlist.infrastructure.persistence;
 
 import com.cleanarch.wishlist.domain.vo.ProductId;
+import com.cleanarch.wishlist.infrastructure.persistence.mongo.WishlistDocumentMongo;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -13,9 +14,9 @@ import java.util.stream.Collectors;
 public interface WishlistMapper {
     WishlistMapper INSTANCE = Mappers.getMapper(WishlistMapper.class);
 
-    WishlistDocument toDocument(Wishlist wishlist);
+    WishlistDocumentMongo toDocument(Wishlist wishlist);
 
-    Wishlist toDomain(WishlistDocument wishlistDocument);
+    Wishlist toDomain(WishlistDocumentMongo wishlistDocumentMongo);
 
     default Set<String> map(Set<ProductId> value){
         if(value == null) return null;

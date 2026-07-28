@@ -1,6 +1,6 @@
 package com.cleanarch.wishlist.infrastructure.repository.mongo;
 
-import com.cleanarch.wishlist.infrastructure.persistence.ConfigPropertyDocument;
+import com.cleanarch.wishlist.infrastructure.persistence.mongo.ConfigPropertyDocumentMongo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,23 +24,23 @@ class ConfigPropertyMongoRepositoryTest {
 
     @Test
     void findValueByKey_shouldReturnValueWhenDocumentExists() {
-        when(mongoRepo.findByKey("wishlist.maxProducts"))
-                .thenReturn(new ConfigPropertyDocument("wishlist.maxProducts", "20"));
+        when(mongoRepo.findByNameKey("wishlist.maxProducts"))
+                .thenReturn(new ConfigPropertyDocumentMongo("wishlist.maxProducts", "20"));
 
         assertThat(repository.findValueByKey("wishlist.maxProducts")).isEqualTo("20");
     }
 
     @Test
     void findValueByKey_shouldReturnNullWhenDocumentDoesNotExist() {
-        when(mongoRepo.findByKey("wishlist.maxProducts")).thenReturn(null);
+        when(mongoRepo.findByNameKey("wishlist.maxProducts")).thenReturn(null);
 
         assertThat(repository.findValueByKey("wishlist.maxProducts")).isNull();
     }
 
     @Test
     void findValueByKey_shouldReturnNullWhenDocumentValueIsNull() {
-        when(mongoRepo.findByKey("wishlist.maxProducts"))
-                .thenReturn(new ConfigPropertyDocument("wishlist.maxProducts", null));
+        when(mongoRepo.findByNameKey("wishlist.maxProducts"))
+                .thenReturn(new ConfigPropertyDocumentMongo("wishlist.maxProducts", null));
 
         assertThat(repository.findValueByKey("wishlist.maxProducts")).isNull();
     }

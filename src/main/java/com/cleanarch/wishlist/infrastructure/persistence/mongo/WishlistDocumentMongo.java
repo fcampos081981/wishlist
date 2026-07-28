@@ -1,4 +1,4 @@
-package com.cleanarch.wishlist.infrastructure.persistence;
+package com.cleanarch.wishlist.infrastructure.persistence.mongo;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +13,7 @@ import java.util.Set;
 @Document(collection = "wishlists")
 @Getter
 @Setter
-public class WishlistDocument {
+public class WishlistDocumentMongo {
 
     @MongoId(targetType = FieldType.STRING)
     private String id;
@@ -23,10 +23,10 @@ public class WishlistDocument {
 
     private Set<String> productIds = new HashSet<>();
 
-    public WishlistDocument() {
+    public WishlistDocumentMongo() {
     }
 
-    public WishlistDocument(String id, String customerId, Set<String> productIds) {
+    public WishlistDocumentMongo(String id, String customerId, Set<String> productIds) {
         this.id = id;
         this.customerId = customerId;
         this.productIds = productIds != null ? productIds : new HashSet<>();

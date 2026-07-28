@@ -1,6 +1,6 @@
 package com.cleanarch.wishlist.application.config;
 
-import com.cleanarch.wishlist.infrastructure.persistence.ConfigPropertyDocument;
+import com.cleanarch.wishlist.infrastructure.persistence.mongo.ConfigPropertyDocumentMongo;
 import com.cleanarch.wishlist.infrastructure.config.MongoCollectionInitializer;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -42,7 +42,7 @@ class MongoCollectionInitializerTest {
         when(mongoDatabase.getName()).thenReturn("wishlist-db");
         when(mongoTemplate.collectionExists("wishlists")).thenReturn(false);
         when(mongoTemplate.collectionExists("config_properties")).thenReturn(false);
-        when(mongoTemplate.exists(any(Query.class), eq(ConfigPropertyDocument.class))).thenReturn(false);
+        when(mongoTemplate.exists(any(Query.class), eq(ConfigPropertyDocumentMongo.class))).thenReturn(false);
         when(mongoTemplate.getCollection("wishlists")).thenReturn(mongoCollection);
         when(mongoCollection.countDocuments()).thenReturn(0L);
 
@@ -50,7 +50,7 @@ class MongoCollectionInitializerTest {
 
         verify(mongoTemplate).createCollection("wishlists");
         verify(mongoTemplate).createCollection("config_properties");
-        verify(mongoTemplate).save(any(ConfigPropertyDocument.class));
+        verify(mongoTemplate).save(any(ConfigPropertyDocumentMongo.class));
     }
 
     @Test
@@ -59,7 +59,7 @@ class MongoCollectionInitializerTest {
         when(mongoDatabase.getName()).thenReturn("wishlist-db");
         when(mongoTemplate.collectionExists("wishlists")).thenReturn(true);
         when(mongoTemplate.collectionExists("config_properties")).thenReturn(true);
-        when(mongoTemplate.exists(any(Query.class), eq(ConfigPropertyDocument.class))).thenReturn(true);
+        when(mongoTemplate.exists(any(Query.class), eq(ConfigPropertyDocumentMongo.class))).thenReturn(true);
         when(mongoTemplate.getCollection("wishlists")).thenReturn(mongoCollection);
         when(mongoCollection.countDocuments()).thenReturn(5L);
 
@@ -67,7 +67,7 @@ class MongoCollectionInitializerTest {
 
         verify(mongoTemplate, never()).createCollection("wishlists");
         verify(mongoTemplate, never()).createCollection("config_properties");
-        verify(mongoTemplate, never()).save(any(ConfigPropertyDocument.class));
+        verify(mongoTemplate, never()).save(any(ConfigPropertyDocumentMongo.class));
     }
 
     @Test
@@ -76,16 +76,16 @@ class MongoCollectionInitializerTest {
         when(mongoDatabase.getName()).thenReturn("wishlist-db");
         when(mongoTemplate.collectionExists("wishlists")).thenReturn(true);
         when(mongoTemplate.collectionExists("config_properties")).thenReturn(true);
-        when(mongoTemplate.exists(any(Query.class), eq(ConfigPropertyDocument.class))).thenReturn(false);
+        when(mongoTemplate.exists(any(Query.class), eq(ConfigPropertyDocumentMongo.class))).thenReturn(false);
         when(mongoTemplate.getCollection("wishlists")).thenReturn(mongoCollection);
         when(mongoCollection.countDocuments()).thenReturn(0L);
 
         initializer.run(new DefaultApplicationArguments(new String[]{}));
 
-        ArgumentCaptor<ConfigPropertyDocument> captor = ArgumentCaptor.forClass(ConfigPropertyDocument.class);
+        ArgumentCaptor<ConfigPropertyDocumentMongo> captor = ArgumentCaptor.forClass(ConfigPropertyDocumentMongo.class);
         verify(mongoTemplate).save(captor.capture());
-        ConfigPropertyDocument saved = captor.getValue();
-        org.assertj.core.api.Assertions.assertThat(saved.getKey()).isEqualTo("wishlist.maxProducts");
-        org.assertj.core.api.Assertions.assertThat(saved.getValue()).isEqualTo("20");
+        ConfigPropertyDocumentMongo saved = captor.getValue();
+        org.assertj.core.api.Assertions.assertThat(saved.getNameKey()).isEqualTo("wishlist.maxProducts");
+        org.assertj.core.api.Assertions.assertThat(saved.getValeuKey()).isEqualTo("20");
     }
 }

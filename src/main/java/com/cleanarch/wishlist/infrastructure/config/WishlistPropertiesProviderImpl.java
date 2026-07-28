@@ -2,7 +2,6 @@ package com.cleanarch.wishlist.infrastructure.config;
 
 import com.cleanarch.wishlist.application.config.WishlistPropertiesProvider;
 import com.cleanarch.wishlist.domain.repositorie.ConfigPropertyRepository;
-import com.cleanarch.wishlist.infrastructure.persistence.ConfigPropertyDocument;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

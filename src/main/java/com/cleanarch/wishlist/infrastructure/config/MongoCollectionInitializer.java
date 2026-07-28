@@ -1,6 +1,6 @@
 package com.cleanarch.wishlist.infrastructure.config;
 
-import com.cleanarch.wishlist.infrastructure.persistence.ConfigPropertyDocument;
+import com.cleanarch.wishlist.infrastructure.persistence.mongo.ConfigPropertyDocumentMongo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
@@ -48,9 +48,9 @@ public class MongoCollectionInitializer implements ApplicationRunner {
     }
 
     private void seedMaxProductsIfAbsent() {
-        Query query = Query.query(Criteria.where("key").is(MAX_PRODUCTS_KEY));
-        if (!mongoTemplate.exists(query, ConfigPropertyDocument.class)) {
-            mongoTemplate.save(new ConfigPropertyDocument(MAX_PRODUCTS_KEY, DEFAULT_MAX_PRODUCTS));
+        Query query = Query.query(Criteria.where("nameKey").is(MAX_PRODUCTS_KEY));
+        if (!mongoTemplate.exists(query, ConfigPropertyDocumentMongo.class)) {
+            mongoTemplate.save(new ConfigPropertyDocumentMongo(MAX_PRODUCTS_KEY, DEFAULT_MAX_PRODUCTS));
             log.warn("Config property seed: {}={}", MAX_PRODUCTS_KEY, DEFAULT_MAX_PRODUCTS);
         }
     }

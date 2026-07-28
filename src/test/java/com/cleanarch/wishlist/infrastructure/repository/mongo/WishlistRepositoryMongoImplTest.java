@@ -3,7 +3,7 @@ package com.cleanarch.wishlist.infrastructure.repository.mongo;
 import com.cleanarch.wishlist.domain.entity.Wishlist;
 import com.cleanarch.wishlist.domain.vo.ProductId;
 import com.cleanarch.wishlist.infrastructure.persistence.WishlistMapper;
-import com.cleanarch.wishlist.infrastructure.persistence.WishlistDocument;
+import com.cleanarch.wishlist.infrastructure.persistence.mongo.WishlistDocumentMongo;
 import com.mongodb.client.MongoDatabase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,7 +47,7 @@ class WishlistRepositoryMongoImplTest {
 
     @Test
     void findByCustomerId_shouldReturnDomainWhenDocumentExists() {
-        WishlistDocument document = new WishlistDocument("id-1", CUSTOMER_ID, Set.of("product-1"));
+        WishlistDocumentMongo document = new WishlistDocumentMongo("id-1", CUSTOMER_ID, Set.of("product-1"));
         Wishlist wishlist = new Wishlist("id-1", CUSTOMER_ID, new HashSet<>(Set.of(new ProductId("product-1"))));
 
         when(mongoRepo.findByCustomerId(CUSTOMER_ID)).thenReturn(Optional.of(document));
@@ -70,8 +70,8 @@ class WishlistRepositoryMongoImplTest {
     @Test
     void save_shouldUpsertAndReturnDomain() {
         Wishlist wishlist = new Wishlist(null, CUSTOMER_ID, new HashSet<>(Set.of(new ProductId("product-1"))));
-        WishlistDocument incoming = new WishlistDocument(null, CUSTOMER_ID, Set.of("product-1"));
-        WishlistDocument savedDocument = new WishlistDocument("id-1", CUSTOMER_ID, Set.of("product-1"));
+        WishlistDocumentMongo incoming = new WishlistDocumentMongo(null, CUSTOMER_ID, Set.of("product-1"));
+        WishlistDocumentMongo savedDocument = new WishlistDocumentMongo("id-1", CUSTOMER_ID, Set.of("product-1"));
         Wishlist savedWishlist = new Wishlist("id-1", CUSTOMER_ID, new HashSet<>(Set.of(new ProductId("product-1"))));
 
         when(wishlistMapper.toDocument(wishlist)).thenReturn(incoming);
@@ -79,7 +79,7 @@ class WishlistRepositoryMongoImplTest {
                 any(Query.class),
                 any(Update.class),
                 any(FindAndModifyOptions.class),
-                eq(WishlistDocument.class)
+                eq(WishlistDocumentMongo.class)
         )).thenReturn(savedDocument);
         when(wishlistMapper.toDomain(savedDocument)).thenReturn(savedWishlist);
         when(mongoTemplate.getDb()).thenReturn(mongoDatabase);
@@ -92,21 +92,21 @@ class WishlistRepositoryMongoImplTest {
                 any(Query.class),
                 any(Update.class),
                 any(FindAndModifyOptions.class),
-                eq(WishlistDocument.class)
+                eq(WishlistDocumentMongo.class)
         );
     }
 
     @Test
     void save_shouldHandleNullSavedDocument() {
         Wishlist wishlist = new Wishlist(null, CUSTOMER_ID, new HashSet<>(Set.of(new ProductId("product-1"))));
-        WishlistDocument incoming = new WishlistDocument(null, CUSTOMER_ID, Set.of("product-1"));
+        WishlistDocumentMongo incoming = new WishlistDocumentMongo(null, CUSTOMER_ID, Set.of("product-1"));
 
         when(wishlistMapper.toDocument(wishlist)).thenReturn(incoming);
         when(mongoTemplate.findAndModify(
                 any(Query.class),
                 any(Update.class),
                 any(FindAndModifyOptions.class),
-                eq(WishlistDocument.class)
+                eq(WishlistDocumentMongo.class)
         )).thenReturn(null);
         when(wishlistMapper.toDomain(null)).thenReturn(null);
         when(mongoTemplate.getDb()).thenReturn(mongoDatabase);

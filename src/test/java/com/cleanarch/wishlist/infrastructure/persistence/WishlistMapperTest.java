@@ -2,6 +2,7 @@ package com.cleanarch.wishlist.infrastructure.persistence;
 
 import com.cleanarch.wishlist.domain.entity.Wishlist;
 import com.cleanarch.wishlist.domain.vo.ProductId;
+import com.cleanarch.wishlist.infrastructure.persistence.mongo.WishlistDocumentMongo;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -21,7 +22,7 @@ class WishlistMapperTest {
                 new HashSet<>(Set.of(new ProductId("product-1")))
         );
 
-        WishlistDocument document = mapper.toDocument(wishlist);
+        WishlistDocumentMongo document = mapper.toDocument(wishlist);
 
         assertThat(document.getId()).isEqualTo("id-1");
         assertThat(document.getCustomerId()).isEqualTo("customer-1");
@@ -35,7 +36,7 @@ class WishlistMapperTest {
 
     @Test
     void toDomain_shouldMapAllFields() {
-        WishlistDocument document = new WishlistDocument(
+        WishlistDocumentMongo document = new WishlistDocumentMongo(
                 "id-1",
                 "customer-1",
                 Set.of("product-1")

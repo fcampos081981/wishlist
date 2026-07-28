@@ -1,5 +1,7 @@
 package com.cleanarch.wishlist.infrastructure.persistence;
 
+import com.cleanarch.wishlist.infrastructure.persistence.mongo.ConfigPropertyDocumentMongo;
+import com.cleanarch.wishlist.infrastructure.persistence.mongo.WishlistDocumentMongo;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -11,14 +13,14 @@ class PersistenceDocumentTest {
 
     @Test
     void wishlistDocument_defaultConstructor_shouldInitializeProductIds() {
-        WishlistDocument document = new WishlistDocument();
+        WishlistDocumentMongo document = new WishlistDocumentMongo();
 
         assertThat(document.getProductIds()).isNotNull().isEmpty();
     }
 
     @Test
     void wishlistDocument_parameterizedConstructor_shouldSetFields() {
-        WishlistDocument document = new WishlistDocument("id-1", "customer-1", Set.of("product-1"));
+        WishlistDocumentMongo document = new WishlistDocumentMongo("id-1", "customer-1", Set.of("product-1"));
 
         assertThat(document.getId()).isEqualTo("id-1");
         assertThat(document.getCustomerId()).isEqualTo("customer-1");
@@ -27,14 +29,14 @@ class PersistenceDocumentTest {
 
     @Test
     void wishlistDocument_parameterizedConstructor_shouldUseEmptySetWhenNull() {
-        WishlistDocument document = new WishlistDocument("id-1", "customer-1", null);
+        WishlistDocumentMongo document = new WishlistDocumentMongo("id-1", "customer-1", null);
 
         assertThat(document.getProductIds()).isNotNull().isEmpty();
     }
 
     @Test
     void wishlistDocument_setters_shouldUpdateFields() {
-        WishlistDocument document = new WishlistDocument();
+        WishlistDocumentMongo document = new WishlistDocumentMongo();
         document.setId("id-1");
         document.setCustomerId("customer-1");
         document.setProductIds(new HashSet<>(Set.of("product-1")));
@@ -46,23 +48,23 @@ class PersistenceDocumentTest {
 
     @Test
     void configPropertyDocument_shouldExposeFields() {
-        ConfigPropertyDocument document = new ConfigPropertyDocument("wishlist.maxProducts", "20");
+        ConfigPropertyDocumentMongo document = new ConfigPropertyDocumentMongo("wishlist.maxProducts", "20");
 
-        assertThat(document.getKey()).isEqualTo("wishlist.maxProducts");
-        assertThat(document.getValue()).isEqualTo("20");
+        assertThat(document.getNameKey()).isEqualTo("wishlist.maxProducts");
+        assertThat(document.getValeuKey()).isEqualTo("20");
 
         document.setId("id-1");
-        document.setKey("other.key");
-        document.setValue("30");
+        document.setNameKey("other.nameKey");
+        document.setValeuKey("30");
 
         assertThat(document.getId()).isEqualTo("id-1");
-        assertThat(document.getKey()).isEqualTo("other.key");
-        assertThat(document.getValue()).isEqualTo("30");
+        assertThat(document.getNameKey()).isEqualTo("other.nameKey");
+        assertThat(document.getValeuKey()).isEqualTo("30");
     }
 
     @Test
     void configPropertyDocument_defaultConstructor_shouldCreateInstance() {
-        ConfigPropertyDocument document = new ConfigPropertyDocument();
+        ConfigPropertyDocumentMongo document = new ConfigPropertyDocumentMongo();
 
         assertThat(document).isNotNull();
     }

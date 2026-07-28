@@ -2,7 +2,7 @@ package com.cleanarch.wishlist.infrastructure.repository.mongo;
 
 import com.cleanarch.wishlist.domain.entity.Wishlist;
 import com.cleanarch.wishlist.domain.repositorie.WishlistRepository;
-import com.cleanarch.wishlist.infrastructure.persistence.WishlistDocument;
+import com.cleanarch.wishlist.infrastructure.persistence.mongo.WishlistDocumentMongo;
 import com.cleanarch.wishlist.infrastructure.persistence.WishlistMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +44,7 @@ public class WishlistRepositoryMongoImpl implements WishlistRepository {
 
     @Override
     public Wishlist save(Wishlist wishlist) {
-        WishlistDocument incoming = wishlistMapper.toDocument(wishlist);
+        WishlistDocumentMongo incoming = wishlistMapper.toDocument(wishlist);
 
         Query byCustomer = Query.query(Criteria.where("customerId").is(wishlist.getCustomerId()));
         Update update = new Update()
@@ -52,11 +52,11 @@ public class WishlistRepositoryMongoImpl implements WishlistRepository {
                 .setOnInsert("customerId", wishlist.getCustomerId())
                 .setOnInsert("_id", UUID.randomUUID().toString());
 
-        WishlistDocument saved = mongoTemplate.findAndModify(
+        WishlistDocumentMongo saved = mongoTemplate.findAndModify(
                 byCustomer,
                 update,
                 FindAndModifyOptions.options().upsert(true).returnNew(true),
-                WishlistDocument.class);
+                WishlistDocumentMongo.class);
 
         log.info(
                 "Wishlist salva em {}.{} -> id={}, customerId={}, productIds={}",
