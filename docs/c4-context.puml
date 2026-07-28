@@ -1,0 +1,15 @@
+@startuml Wishlist - C4 Context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Wishlist API — C4 Nível 1: System Context
+
+Person(customer, "Cliente / Consumidor da API", "Sistema ou usuário que gerencia wishlists via HTTP.")
+System(wishlist, "Wishlist API", "API REST para adicionar, remover e consultar produtos favoritos de um cliente.")
+System_Ext(mongodb, "MongoDB", "Persistência de wishlists e propriedades de configuração.")
+
+Rel(customer, wishlist, "Usa", "HTTPS / JSON\n/api/wishlists")
+Rel(wishlist, mongodb, "Lê e grava", "MongoDB wire protocol")
+
+@enduml

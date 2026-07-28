@@ -1,0 +1,22 @@
+@startuml Wishlist - C4 Container
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Wishlist API — C4 Nível 2: Containers
+
+Person(customer, "Cliente / Consumidor da API", "Sistema ou usuário que gerencia wishlists via HTTP.")
+
+System_Boundary(wishlist_system, "Wishlist System") {
+  Container(api, "Wishlist Application", "Spring Boot 4 / Java 25", "Expõe REST, aplica regras de negócio e persiste wishlists. Clean Architecture.")
+  ContainerDb(mongo, "MongoDB", "Document DB", "Collections: wishlists, config_properties")
+}
+
+Container_Ext(swagger, "Swagger UI / OpenAPI", "springdoc", "Documentação interativa da API.")
+
+Rel(customer, api, "Chama endpoints", "HTTPS / JSON\nporta 9080")
+Rel(customer, swagger, "Consulta documentação", "HTTPS\n/swagger-ui.html")
+Rel(swagger, api, "Descreve", "/api-docs")
+Rel(api, mongo, "CRUD wishlists + lê config\n(wishlist.maxProducts)", "Spring Data MongoDB")
+
+@enduml

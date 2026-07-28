@@ -3,6 +3,7 @@ package com.cleanarch.wishlist.infrastructure.persistence;
 import com.cleanarch.wishlist.domain.entity.Wishlist;
 import com.cleanarch.wishlist.domain.vo.ProductId;
 import com.cleanarch.wishlist.infrastructure.persistence.mongo.WishlistDocumentMongo;
+import com.cleanarch.wishlist.infrastructure.persistence.postgresql.WishlistEntityPostgresql;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -52,6 +53,69 @@ class WishlistMapperTest {
     @Test
     void toDomain_shouldReturnNullWhenDocumentIsNull() {
         assertThat(mapper.toDomain(null)).isNull();
+    }
+
+    @Test
+    void toPostgresqlEntity_shouldMapAllFields() {
+        Wishlist wishlist = new Wishlist(
+                "10",
+                "customer-1",
+                new HashSet<>(Set.of(new ProductId("product-1")))
+        );
+
+        WishlistEntityPostgresql entity = mapper.toPostgresqlEntity(wishlist);
+
+        assertThat(entity.getId()).isEqualTo(10L);
+        assertThat(entity.getCustomerId()).isEqualTo("customer-1");
+        assertThat(entity.getProductIds()).containsExactly("product-1");
+    }
+
+    @Test
+    void toPostgresqlEntity_shouldSkipIdWhenWishlistIdIsNull() {
+        Wishlist wishlist = new Wishlist(null, "customer-1", new HashSet<>());
+
+        WishlistEntityPostgresql entity = mapper.toPostgresqlEntity(wishlist);
+
+        assertThat(entity.getId()).isNull();
+        assertThat(entity.getCustomerId()).isEqualTo("customer-1");
+        assertThat(entity.getProductIds()).isEmpty();
+    }
+
+    @Test
+    void toPostgresqlEntity_shouldReturnNullWhenWishlistIsNull() {
+        assertThat(mapper.toPostgresqlEntity(null)).isNull();
+    }
+
+    @Test
+    void toDomainPostgresql_shouldMapAllFields() {
+        WishlistEntityPostgresql entity = new WishlistEntityPostgresql();
+        entity.setId(10L);
+        entity.setCustomerId("customer-1");
+        entity.setProductIds(Set.of("product-1"));
+
+        Wishlist wishlist = mapper.toDomainPostgresql(entity);
+
+        assertThat(wishlist.getId()).isEqualTo("10");
+        assertThat(wishlist.getCustomerId()).isEqualTo("customer-1");
+        assertThat(wishlist.getProductIds()).containsExactly(new ProductId("product-1"));
+    }
+
+    @Test
+    void toDomainPostgresql_shouldSkipIdWhenEntityIdIsNull() {
+        WishlistEntityPostgresql entity = new WishlistEntityPostgresql();
+        entity.setCustomerId("customer-1");
+        entity.setProductIds(Set.of("product-1"));
+
+        Wishlist wishlist = mapper.toDomainPostgresql(entity);
+
+        assertThat(wishlist.getId()).isNull();
+        assertThat(wishlist.getCustomerId()).isEqualTo("customer-1");
+        assertThat(wishlist.getProductIds()).containsExactly(new ProductId("product-1"));
+    }
+
+    @Test
+    void toDomainPostgresql_shouldReturnNullWhenEntityIsNull() {
+        assertThat(mapper.toDomainPostgresql(null)).isNull();
     }
 
     @Test

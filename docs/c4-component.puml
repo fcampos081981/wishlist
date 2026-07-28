@@ -1,0 +1,44 @@
+@startuml Wishlist - C4 Component
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Wishlist API — C4 Nível 3: Components
+
+Person(customer, "Cliente HTTP", "Consome a API REST.")
+
+Container_Boundary(api, "Wishlist Application") {
+
+  Component(controller, "WishlistController", "Spring REST", "Endpoints: add/remove produto, remover wishlist, listar produtos.")
+  Component(handler, "GlobalExceptionHandler", "Spring Advice", "Traduz BusinesException / NotFoundException / IllegalArgumentException em HTTP.")
+
+  Component(usecase, "WishlistUseCaseImpl", "Application", "Orquestra regras: limite de produtos, duplicidade, CRUD da wishlist.")
+  Component(props, "WishlistPropertiesProviderImpl", "Application / Config", "Obtém wishlist.maxProducts via ConfigPropertyRepository.")
+
+  Component(domain, "Domain Model", "Domain", "Wishlist, ProductId, BusinesException, NotFoundException.")
+  Component(wishlist_port, "WishlistRepository", "Domain Port", "Porta de persistência de wishlists.")
+  Component(config_port, "ConfigPropertyRepository", "Domain Port", "Porta de leitura de propriedades.")
+
+  Component(wishlist_adapter, "WishlistRepositoryMongoImpl", "Infrastructure", "Adaptador Mongo + MapStruct (WishlistMapper).")
+  Component(config_adapter, "ConfigPropertyMongoRepository", "Infrastructure", "Adaptador Mongo para config_properties.")
+  Component(init, "MongoCollectionInitializer", "Infrastructure", "Cria collections e faz seed de wishlist.maxProducts.")
+  Component(wiring, "WishlistConfig / OpenApiConfig", "Infrastructure", "Beans Spring e documentação OpenAPI.")
+}
+
+ContainerDb(mongo, "MongoDB", "Document DB", "wishlists | config_properties")
+
+Rel(customer, controller, "HTTPS / JSON", "/api/wishlists")
+Rel(controller, usecase, "Invoca")
+Rel(controller, handler, "Exceções tratadas por")
+Rel(usecase, domain, "Usa")
+Rel(usecase, wishlist_port, "Depende de")
+Rel(usecase, props, "Consulta limite")
+Rel(props, config_port, "Depende de")
+Rel(wishlist_adapter, wishlist_port, "Implementa")
+Rel(config_adapter, config_port, "Implementa")
+Rel(wiring, usecase, "Instancia (@Bean)")
+Rel(wishlist_adapter, mongo, "Lê/grava", "wishlists")
+Rel(config_adapter, mongo, "Lê", "config_properties")
+Rel(init, mongo, "Cria collections / seed")
+
+@enduml

@@ -1,0 +1,108 @@
+@startuml Wishlist - Diagrama de Componentes
+!theme plain
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam defaultFontName Arial
+skinparam ArrowColor #333333
+skinparam PackageBorderColor #555555
+skinparam ComponentBorderColor #333333
+
+title Wishlist API — Diagrama de Componentes (Clean Architecture)
+
+actor "Cliente HTTP" as Client
+
+package "Interfaces" as Interfaces #E8F4FD {
+  [WishlistController] as Controller
+  [GlobalExceptionHandler] as ExceptionHandler
+  [DTOs\nResponseDTO / ProductIdsResponseDTO\nErroResponseDTO] as ApiDtos
+}
+
+package "Application" as Application #E8F8E8 {
+  interface "WishlistUseCase" as UseCase
+  [WishlistUseCaseImpl] as UseCaseImpl
+  interface "WishlistPropertiesProvider" as PropsProvider
+  [ProductIdsResponse] as AppDto
+}
+
+package "Domain" as Domain #FFF8E1 {
+  [Wishlist] as Entity
+  [ProductId] as VO
+  interface "WishlistRepository" as WishlistRepo
+  interface "ConfigPropertyRepository" as ConfigRepo
+  [BusinesException\nNotFoundException] as DomainEx
+}
+
+package "Infrastructure" as Infrastructure #FCE4EC {
+  package "Config" {
+    [WishlistConfig] as Config
+    [WishlistPropertiesProviderImpl] as PropsImpl
+    [MongoCollectionInitializer] as Init
+    [OpenApiConfig] as OpenApi
+  }
+
+  package "Persistence Mongo" {
+    [WishlistRepositoryMongoImpl] as WishlistRepoImpl
+    [ConfigPropertyMongoRepository] as ConfigRepoImpl
+    [WishlistMongoSpringData] as WishlistSpringData
+    [ConfigPropertyMongoSpringData] as ConfigSpringData
+    [WishlistMapper] as Mapper
+    [WishlistDocumentMongo] as WishlistDoc
+    [ConfigPropertyDocumentMongo] as ConfigDoc
+  }
+}
+
+database "MongoDB" as Mongo {
+  collections "wishlists" as WishColl
+  collections "config_properties" as ConfigColl
+}
+
+' --- Fluxo principal ---
+Client --> Controller : REST /api/wishlists
+Client --> OpenApi : /swagger-ui.html
+Controller --> UseCase
+Controller --> ApiDtos
+ExceptionHandler ..> DomainEx : trata
+ExceptionHandler --> ApiDtos
+
+UseCase <|.. UseCaseImpl
+UseCaseImpl --> WishlistRepo
+UseCaseImpl --> PropsProvider
+UseCaseImpl --> Entity
+UseCaseImpl --> VO
+UseCaseImpl --> AppDto
+UseCaseImpl ..> DomainEx : lança
+
+Config --> UseCaseImpl : @Bean
+PropsProvider <|.. PropsImpl
+PropsImpl --> ConfigRepo
+
+WishlistRepo <|.. WishlistRepoImpl
+ConfigRepo <|.. ConfigRepoImpl
+
+WishlistRepoImpl --> WishlistSpringData
+WishlistRepoImpl --> Mapper
+WishlistRepoImpl --> WishlistDoc
+ConfigRepoImpl --> ConfigSpringData
+ConfigRepoImpl --> ConfigDoc
+Mapper --> WishlistDoc
+Mapper --> Entity
+
+WishlistSpringData --> WishColl
+ConfigSpringData --> ConfigColl
+Init --> WishColl : cria / seed
+Init --> ConfigColl : cria / seed\nwishlist.maxProducts
+
+note right of Domain
+  Núcleo sem dependências
+  de frameworks.
+  Portas (interfaces) definidas aqui;
+  adaptadores na Infrastructure.
+end note
+
+note bottom of Infrastructure
+  wishlist.repository.type=mongo
+  ativa os adaptadores Mongo.
+end note
+
+@enduml

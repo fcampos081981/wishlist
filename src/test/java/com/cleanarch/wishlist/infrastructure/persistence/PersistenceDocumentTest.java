@@ -2,6 +2,8 @@ package com.cleanarch.wishlist.infrastructure.persistence;
 
 import com.cleanarch.wishlist.infrastructure.persistence.mongo.ConfigPropertyDocumentMongo;
 import com.cleanarch.wishlist.infrastructure.persistence.mongo.WishlistDocumentMongo;
+import com.cleanarch.wishlist.infrastructure.persistence.postgresql.ConfigPropertyEntityPostgresql;
+import com.cleanarch.wishlist.infrastructure.persistence.postgresql.WishlistEntityPostgresql;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -67,5 +69,46 @@ class PersistenceDocumentTest {
         ConfigPropertyDocumentMongo document = new ConfigPropertyDocumentMongo();
 
         assertThat(document).isNotNull();
+    }
+
+    @Test
+    void wishlistEntityPostgresql_defaultConstructor_shouldCreateInstance() {
+        WishlistEntityPostgresql entity = new WishlistEntityPostgresql();
+
+        assertThat(entity).isNotNull();
+        assertThat(entity.getId()).isNull();
+        assertThat(entity.getCustomerId()).isNull();
+        assertThat(entity.getProductIds()).isNull();
+    }
+
+    @Test
+    void wishlistEntityPostgresql_setters_shouldUpdateFields() {
+        WishlistEntityPostgresql entity = new WishlistEntityPostgresql();
+        entity.setId(1L);
+        entity.setCustomerId("customer-1");
+        entity.setProductIds(new HashSet<>(Set.of("product-1")));
+
+        assertThat(entity.getId()).isEqualTo(1L);
+        assertThat(entity.getCustomerId()).isEqualTo("customer-1");
+        assertThat(entity.getProductIds()).containsExactly("product-1");
+    }
+
+    @Test
+    void configPropertyEntityPostgresql_defaultConstructor_shouldCreateInstance() {
+        ConfigPropertyEntityPostgresql entity = new ConfigPropertyEntityPostgresql();
+
+        assertThat(entity).isNotNull();
+        assertThat(entity.getNameKey()).isNull();
+        assertThat(entity.getValueKey()).isNull();
+    }
+
+    @Test
+    void configPropertyEntityPostgresql_setters_shouldUpdateFields() {
+        ConfigPropertyEntityPostgresql entity = new ConfigPropertyEntityPostgresql();
+        entity.setNameKey("wishlist.maxProducts");
+        entity.setValueKey("20");
+
+        assertThat(entity.getNameKey()).isEqualTo("wishlist.maxProducts");
+        assertThat(entity.getValueKey()).isEqualTo("20");
     }
 }
