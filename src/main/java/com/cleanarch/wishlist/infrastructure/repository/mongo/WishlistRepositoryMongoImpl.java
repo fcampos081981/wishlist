@@ -43,7 +43,7 @@ public class WishlistRepositoryMongoImpl implements WishlistRepository {
     }
 
     @Override
-    public Wishlist save(Wishlist wishlist) {
+    public void save(Wishlist wishlist) {
         WishlistDocumentMongo incoming = wishlistMapper.toDocument(wishlist);
 
         Query byCustomer = Query.query(Criteria.where("customerId").is(wishlist.getCustomerId()));
@@ -66,7 +66,7 @@ public class WishlistRepositoryMongoImpl implements WishlistRepository {
                 wishlist.getCustomerId(),
                 incoming.getProductIds());
 
-        return wishlistMapper.toDomain(saved);
+
     }
 
     @Override
