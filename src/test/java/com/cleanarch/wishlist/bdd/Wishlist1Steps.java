@@ -6,11 +6,19 @@ import com.cleanarch.wishlist.application.usecase.WishlistUseCaseImpl;
 import com.cleanarch.wishlist.domain.entity.Wishlist;
 import com.cleanarch.wishlist.domain.repositorie.WishlistRepository;
 import com.cleanarch.wishlist.domain.vo.ProductId;
+import com.cleanarch.wishlist.infrastructure.config.MongoCollectionInitializer;
+import com.cleanarch.wishlist.infrastructure.repository.ConfigPropertyMongoSpringData;
+import com.cleanarch.wishlist.infrastructure.repository.WishlistMongoSpringData;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.data.mongodb.autoconfigure.DataMongoAutoConfiguration;
+import org.springframework.boot.mongodb.autoconfigure.MongoAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -22,8 +30,20 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@ActiveProfiles("test")
+@ImportAutoConfiguration(exclude = {MongoAutoConfiguration.class, DataMongoAutoConfiguration.class})
 public class Wishlist1Steps {
+    @MockitoBean
+    private WishlistMongoSpringData wishlistMongoSpringData;
+
+    @MockitoBean
+    private ConfigPropertyMongoSpringData configPropertyMongoSpringData;
+
+    @MockitoBean
+    private MongoTemplate mongoTemplate;
+
+    @MockitoBean
+    private MongoCollectionInitializer mongoCollectionInitializer;
 
     private final WishlistRepository wishlistRepository = mock(WishlistRepository.class);
     private final WishlistPropertiesProvider wishlistPropertiesProvider = mock(WishlistPropertiesProvider.class);

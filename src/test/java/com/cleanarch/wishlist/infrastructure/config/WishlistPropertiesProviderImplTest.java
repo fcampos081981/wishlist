@@ -1,7 +1,7 @@
 package com.cleanarch.wishlist.infrastructure.config;
 
 import com.cleanarch.wishlist.infrastructure.persistence.ConfigPropertyDocument;
-import com.cleanarch.wishlist.infrastructure.repository.ConfigPropertyRepository;
+import com.cleanarch.wishlist.infrastructure.repository.ConfigPropertyMongoSpringData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 class WishlistPropertiesProviderImplTest {
 
     @Mock
-    private ConfigPropertyRepository configRepo;
+    private ConfigPropertyMongoSpringData configRepo;
 
     @InjectMocks
     private WishlistPropertiesProviderImpl propertiesProvider;

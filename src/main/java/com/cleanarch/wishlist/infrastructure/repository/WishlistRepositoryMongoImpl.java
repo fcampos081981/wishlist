@@ -2,10 +2,11 @@ package com.cleanarch.wishlist.infrastructure.repository;
 
 import com.cleanarch.wishlist.domain.entity.Wishlist;
 import com.cleanarch.wishlist.domain.repositorie.WishlistRepository;
-import com.cleanarch.wishlist.infrastructure.persistence.WishlistMapper;
 import com.cleanarch.wishlist.infrastructure.persistence.WishlistDocument;
+import com.cleanarch.wishlist.infrastructure.persistence.WishlistMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -17,6 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
+@ConditionalOnProperty(name = "wishlist.repository.type", havingValue = "mongo")
 public class WishlistRepositoryMongoImpl implements WishlistRepository {
 
     private static final Logger log = LoggerFactory.getLogger(WishlistRepositoryMongoImpl.class);

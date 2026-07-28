@@ -2,7 +2,7 @@ package com.cleanarch.wishlist.infrastructure.config;
 
 import com.cleanarch.wishlist.application.config.WishlistPropertiesProvider;
 import com.cleanarch.wishlist.infrastructure.persistence.ConfigPropertyDocument;
-import com.cleanarch.wishlist.infrastructure.repository.ConfigPropertyRepository;
+import com.cleanarch.wishlist.infrastructure.repository.ConfigPropertyMongoSpringData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
 public class WishlistPropertiesProviderImpl implements WishlistPropertiesProvider {
 
     private static final Logger LOGGER = LogManager.getLogger(WishlistPropertiesProviderImpl.class);
-    private final ConfigPropertyRepository configRepo;
+    private final ConfigPropertyMongoSpringData configRepo;
 
-    public WishlistPropertiesProviderImpl(ConfigPropertyRepository configRepo) {
+    public WishlistPropertiesProviderImpl(ConfigPropertyMongoSpringData configRepo) {
         this.configRepo = configRepo;
     }
 

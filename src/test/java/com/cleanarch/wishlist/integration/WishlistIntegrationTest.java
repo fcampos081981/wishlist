@@ -5,11 +5,19 @@ import com.cleanarch.wishlist.application.config.WishlistPropertiesProvider;
 import com.cleanarch.wishlist.domain.entity.Wishlist;
 import com.cleanarch.wishlist.domain.repositorie.WishlistRepository;
 import com.cleanarch.wishlist.domain.vo.ProductId;
+import com.cleanarch.wishlist.infrastructure.config.MongoCollectionInitializer;
+import com.cleanarch.wishlist.infrastructure.repository.ConfigPropertyMongoSpringData;
+import com.cleanarch.wishlist.infrastructure.repository.WishlistMongoSpringData;
 import com.cleanarch.wishlist.interfaces.api.dto.ResponseDTO;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.data.mongodb.autoconfigure.DataMongoAutoConfiguration;
+import org.springframework.boot.mongodb.autoconfigure.MongoAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.web.client.RestClient;
 
@@ -25,10 +33,24 @@ import static org.mockito.Mockito.when;
         classes = WishlistApplication.class,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
-public class WishlistIntegrationTest {
+@ActiveProfiles("test")
+@ImportAutoConfiguration(exclude = {MongoAutoConfiguration.class, DataMongoAutoConfiguration.class})
+class WishlistIntegrationTest {
 
     @LocalServerPort
     private int port;
+
+    @MockitoBean
+    private MongoTemplate mongoTemplate;
+
+    @MockitoBean
+    private MongoCollectionInitializer mongoCollectionInitializer;
+
+    @MockitoBean
+    private WishlistMongoSpringData wishlistMongoSpringData;
+
+    @MockitoBean
+    private ConfigPropertyMongoSpringData configPropertyMongoSpringData;
 
     @MockitoBean
     private WishlistRepository wishlistRepository;
@@ -63,7 +85,7 @@ public class WishlistIntegrationTest {
         when(wishlistRepository.findByCustomerId(customerId)).thenReturn(Optional.of(wishlist));
 
         ResponseDTO<?> response =  restClient().get()
-                .uri("/api/wishlists/" + customerId + "/products/")
+                .uri("/api/wishlists/" + customerId + "/products")
                 .retrieve()
                 .body(ResponseDTO.class);
 
