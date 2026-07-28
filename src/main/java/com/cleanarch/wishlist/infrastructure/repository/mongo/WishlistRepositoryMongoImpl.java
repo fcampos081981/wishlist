@@ -1,4 +1,4 @@
-package com.cleanarch.wishlist.infrastructure.repository;
+package com.cleanarch.wishlist.infrastructure.repository.mongo;
 
 import com.cleanarch.wishlist.domain.entity.Wishlist;
 import com.cleanarch.wishlist.domain.repositorie.WishlistRepository;

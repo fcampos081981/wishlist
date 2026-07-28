@@ -1,4 +1,4 @@
-package com.cleanarch.wishlist.infrastructure.repository;
+package com.cleanarch.wishlist.infrastructure.repository.mongo;
 
 import com.cleanarch.wishlist.infrastructure.persistence.ConfigPropertyDocument;
 import org.springframework.data.mongodb.repository.MongoRepository;

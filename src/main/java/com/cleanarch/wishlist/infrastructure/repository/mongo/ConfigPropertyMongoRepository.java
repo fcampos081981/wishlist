@@ -2,7 +2,6 @@ package com.cleanarch.wishlist.infrastructure.repository.mongo;
 
 import com.cleanarch.wishlist.domain.repositorie.ConfigPropertyRepository;
 import com.cleanarch.wishlist.infrastructure.persistence.ConfigPropertyDocument;
-import com.cleanarch.wishlist.infrastructure.repository.ConfigPropertyMongoSpringData;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 
