@@ -96,6 +96,24 @@ class WishlistTest {
     }
 
     @Test
+    void getNote_shouldReturnStoredNote() {
+        ProductId productId = new ProductId("product-1");
+        Wishlist wishlist = new Wishlist("id-1", "customer-1", new HashSet<>(Set.of(productId)));
+        wishlist.addNote(productId, "buy on Black Friday");
+
+        assertThat(wishlist.getNote(productId)).isEqualTo("buy on Black Friday");
+    }
+
+    @Test
+    void getNote_shouldThrowWhenProductDoesNotExist() {
+        Wishlist wishlist = new Wishlist("id-1", "customer-1", new HashSet<>());
+
+        assertThatThrownBy(() -> wishlist.getNote(new ProductId("product-1")))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Product not in wishlist");
+    }
+
+    @Test
     void productNotes_settersAndGetters_shouldUpdateFields() {
         Wishlist wishlist = new Wishlist();
         Map<ProductId, String> notes = new HashMap<>();

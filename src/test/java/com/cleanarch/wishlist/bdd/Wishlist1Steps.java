@@ -119,7 +119,7 @@ public class Wishlist1Steps {
 
 
     @When("the customer {string} adds note  {string} to {string} in to wishlist")
-    public void theCustomerAddsNoteToInToWishlist(String idCustomer, String idProduct, String note) {
+    public void theCustomerAddsNoteToInToWishlist(String idCustomer, String note, String idProduct) {
         customerId = idCustomer;
         productId = idProduct;
         productNote = note;

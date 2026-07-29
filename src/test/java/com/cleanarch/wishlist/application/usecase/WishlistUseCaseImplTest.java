@@ -21,7 +21,10 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -248,5 +251,28 @@ class WishlistUseCaseImplTest {
                 .hasMessage("productId cannot be a null or empty");
 
         verify(wishlistRepository, never()).save(any());
+    }
+
+    @Test
+    void getNoteForProduct_shouldReturnNote(){
+        String customerId = "customer-id";
+        String productId = "prod-id-2";
+        String note = "I want to buy this product on Black Friday";
+        Wishlist wishlist = mock(Wishlist.class);
+
+        when(wishlistRepository.findByCustomerId(customerId)).thenReturn(Optional.of(wishlist));
+        when(wishlist.getNote(new ProductId(productId))).thenReturn(note);
+        String result = wishlistUseCase.getNoteForProduct(customerId, productId);
+        assertEquals(note, result);
+        verify(wishlist).getNote(new ProductId(productId));
+    }
+
+    @Test
+    void getNoteForProduct_shouldNThrow_When_wishlist_not_found(){
+        String customerId = "customer-id";
+        String productId = "prod-id-2";
+
+        when(wishlistRepository.findByCustomerId(customerId)).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class, () -> wishlistUseCase.getNoteForProduct(customerId, productId));
     }
 }
