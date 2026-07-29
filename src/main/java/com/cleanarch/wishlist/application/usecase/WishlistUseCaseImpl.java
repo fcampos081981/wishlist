@@ -7,9 +7,11 @@ import com.cleanarch.wishlist.domain.exception.BusinesException;
 import com.cleanarch.wishlist.domain.exception.NotFoundException;
 import com.cleanarch.wishlist.domain.repositorie.WishlistRepository;
 import com.cleanarch.wishlist.domain.vo.ProductId;
+import org.apache.logging.log4j.core.jackson.MapEntry;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -86,9 +88,9 @@ public class WishlistUseCaseImpl implements WishlistUseCase {
 
     @Override
     public ProductsResponse getAllProducts(String customerId) {
-        Optional<Wishlist> allProductsByCosyumer = wishlistRepository.findByCustomerId(customerId);
+        Optional<Wishlist> allProductsByCustomerId = wishlistRepository.findByCustomerId(customerId);
 
-        Set<ProductId> ids = allProductsByCosyumer
+        Set<ProductId> ids = allProductsByCustomerId
                 .map(Wishlist::getProductIds)
                 .orElse(Collections.emptySet());
 
@@ -97,7 +99,15 @@ public class WishlistUseCaseImpl implements WishlistUseCase {
                 .map(ProductId::toString)
                 .collect(Collectors.toSet());
 
-        return new ProductsResponse(idsAsString);
+        Map<String, String> productNotes = allProductsByCustomerId
+                .map(w -> {
+                    return w.getProductNotes().entrySet().stream()
+                            .collect(Collectors
+                                    .toMap(e -> e.getKey().toString(), Map.Entry::getValue));
+                })
+                .orElse(Collections.emptyMap());
+
+        return new ProductsResponse(idsAsString, productNotes);
     }
 
     @Override

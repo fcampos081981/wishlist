@@ -8,6 +8,9 @@ import org.mapstruct.factory.Mappers;
 
 import com.cleanarch.wishlist.domain.entity.Wishlist;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,12 +27,26 @@ public interface WishlistMapper {
     Wishlist toDomainPostgresql(WishlistEntityPostgresql entity);
 
     default Set<String> map(Set<ProductId> value){
-        if(value == null) return null;
+        if(value == null) return Collections.emptySet();
         return value.stream().map(ProductId::value).collect(Collectors.toSet());
     }
 
     default Set<ProductId> mapToProductId(Set<String> value) {
-        if (value == null) return null;
+        if (value == null) return Collections.emptySet();
         return value.stream().map(ProductId::new).collect(Collectors.toSet());
+    }
+
+    default Map<String, String> mapToProductNotes(Map<ProductId, String> value) {
+        if (value == null) return Collections.emptyMap();
+        Map<String, String> result = new HashMap<>();
+        value.forEach((k, v) -> result.put(k.toString(), v));
+        return result;
+    }
+
+    default Map<ProductId, String> mapToProductIdNotes(Map<String, String> value) {
+        if (value == null) return Collections.emptyMap();
+        Map<ProductId, String> result = new HashMap<>();
+        value.forEach((k, v) -> result.put(new ProductId(k), v));
+        return result;
     }
 }

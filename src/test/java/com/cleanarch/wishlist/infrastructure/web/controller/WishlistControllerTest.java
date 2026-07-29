@@ -1,11 +1,10 @@
 package com.cleanarch.wishlist.infrastructure.web.controller;
 
 import com.cleanarch.wishlist.application.dto.ProductsResponse;
-import com.cleanarch.wishlist.application.usecase.WishlistUseCaseImpl;
+import com.cleanarch.wishlist.application.usecase.WishlistUseCase;
 import com.cleanarch.wishlist.domain.exception.BusinesException;
 import com.cleanarch.wishlist.domain.exception.NotFoundException;
-import com.cleanarch.wishlist.infrastructure.web.controller.WishlistController;
-import com.cleanarch.wishlist.interfaces.handler.GlobalExceptionHandler;
+import com.cleanarch.wishlist.infrastructure.web.handler.handler.GlobalExceptionHandler;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -14,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Map;
 import java.util.Set;
 
 import static org.mockito.Mockito.doNothing;
@@ -43,7 +43,7 @@ class WishlistControllerTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private WishlistUseCaseImpl wishlistUseCase;
+    private WishlistUseCase wishlistUseCase;
 
     @Test
     void addProduct_shouldReturnCreated() throws Exception {
@@ -108,7 +108,7 @@ class WishlistControllerTest {
     @Test
     void getAllProducts_shouldReturnProducts() throws Exception {
         when(wishlistUseCase.getAllProducts(CUSTOMER_ID))
-                .thenReturn(new ProductsResponse(Set.of(PRODUCT_ID)));
+                .thenReturn(new ProductsResponse(Set.of(PRODUCT_ID), Map.of()));
 
         mockMvc.perform(get("/api/wishlists/{customerId}/products", CUSTOMER_ID)
                         .accept(MediaType.APPLICATION_JSON))
@@ -121,7 +121,7 @@ class WishlistControllerTest {
     @Test
     void getAllProducts_shouldReturnEmptyListWhenNoProducts() throws Exception {
         when(wishlistUseCase.getAllProducts(CUSTOMER_ID))
-                .thenReturn(new ProductsResponse(Set.of()));
+                .thenReturn(new ProductsResponse(Set.of(), Map.of()));
 
         mockMvc.perform(get("/api/wishlists/{customerId}/products", CUSTOMER_ID)
                         .accept(MediaType.APPLICATION_JSON))

@@ -2,6 +2,7 @@ package com.cleanarch.wishlist.interfaces.handler;
 
 import com.cleanarch.wishlist.domain.exception.BusinesException;
 import com.cleanarch.wishlist.domain.exception.NotFoundException;
+import com.cleanarch.wishlist.infrastructure.web.handler.handler.GlobalExceptionHandler;
 import com.cleanarch.wishlist.interfaces.api.dto.ErroResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

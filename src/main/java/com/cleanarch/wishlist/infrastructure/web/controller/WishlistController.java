@@ -39,7 +39,7 @@ public class WishlistController {
     @GetMapping("/{customerId}/products")
     public ResponseEntity<ResponseDTO<ProductsResponseDTO>> getAllProducts(@PathVariable String customerId) {
         ProductsResponse productsResponse = wishlistUseCase.getAllProducts(customerId);
-        ProductsResponseDTO dto = new ProductsResponseDTO(productsResponse.getProductIds());
+        ProductsResponseDTO dto = new ProductsResponseDTO(productsResponse.getProductIds(), productsResponse.getProductNotes());
         ResponseDTO<ProductsResponseDTO> response =
                 new ResponseDTO<>(dto, "Success", HttpStatus.OK.value());
         return ResponseEntity.ok(response);

@@ -1,4 +1,4 @@
-package com.cleanarch.wishlist.interfaces.handler;
+package com.cleanarch.wishlist.infrastructure.web.handler.handler;
 
 import com.cleanarch.wishlist.domain.exception.BusinesException;
 import com.cleanarch.wishlist.domain.exception.NotFoundException;

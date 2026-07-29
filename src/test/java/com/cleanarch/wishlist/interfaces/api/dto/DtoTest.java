@@ -3,6 +3,7 @@ package com.cleanarch.wishlist.interfaces.api.dto;
 import com.cleanarch.wishlist.application.dto.ProductsResponse;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -11,10 +12,21 @@ class DtoTest {
 
     @Test
     void productIdsResponse_shouldExposeProductIds() {
-        ProductsResponse response = new ProductsResponse(Set.of("product-1"));
+        ProductsResponse response = new ProductsResponse(Set.of("product-1"), Map.of("product-1", "note-1"));
         response.setProductIds(Set.of("product-2"));
 
         assertThat(response.getProductIds()).containsExactly("product-2");
+    }
+
+    @Test
+    void productIdsResponse_shouldExposeProductNotes() {
+        ProductsResponse response = new ProductsResponse(Set.of("product-1"), Map.of("product-1", "note-1"));
+
+        assertThat(response.getProductNotes()).containsEntry("product-1", "note-1");
+
+        response.setProductNotes(Map.of("product-2", "note-2"));
+
+        assertThat(response.getProductNotes()).containsEntry("product-2", "note-2");
     }
 
     @Test
