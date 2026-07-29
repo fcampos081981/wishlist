@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -22,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -199,5 +201,52 @@ class WishlistUseCaseImplTest {
         ProductIdsResponse response = wishlistUseCase.getAllProducts(CUSTOMER_ID);
 
         assertThat(response.getProductIds()).isEmpty();
+    }
+
+    @Test
+    void addNoteProduct_shouldAddNotAdnSaveWishlist() {
+        String customerId = "customer-id";
+        String productId = "prod-id-2";
+        String note = "I want to buy this product on Black Friday";
+
+        HashSet<ProductId> products = new HashSet<>(Collections.singleton(new ProductId(productId)));
+        Wishlist wishlist = spy(new Wishlist("id", customerId, products));
+
+        when(wishlistRepository.findByCustomerId(customerId)).thenReturn(Optional.of(wishlist));
+
+        wishlistUseCase.addNoteToProduct(customerId, productId, note);
+
+        verify(wishlist).addNote(new ProductId(productId), note);
+        verify(wishlistRepository).save(wishlist);
+
+    }
+
+    @Test
+    void addNoteToProduct_shouldThrowWhenWishlistNotFound() {
+        when(wishlistRepository.findByCustomerId(CUSTOMER_ID)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> wishlistUseCase.addNoteToProduct(CUSTOMER_ID, PRODUCT_ID, "note"))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("Wishlist not found!");
+
+        verify(wishlistRepository, never()).save(any());
+    }
+
+    @Test
+    void addNoteToProduct_shouldThrowWhenCustomerIdIsNull() {
+        assertThatThrownBy(() -> wishlistUseCase.addNoteToProduct(null, PRODUCT_ID, "note"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("customerId cannot be a null or empty");
+
+        verify(wishlistRepository, never()).save(any());
+    }
+
+    @Test
+    void addNoteToProduct_shouldThrowWhenProductIdIsEmpty() {
+        assertThatThrownBy(() -> wishlistUseCase.addNoteToProduct(CUSTOMER_ID, "", "note"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("productId cannot be a null or empty");
+
+        verify(wishlistRepository, never()).save(any());
     }
 }

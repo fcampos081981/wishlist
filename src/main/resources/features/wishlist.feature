@@ -13,3 +13,10 @@ Feature: Wishlist management
     Then the wishlist of customer "cust1" should contain product "prod1"
     When the customer "cust1" removes product "prod1" from the wishlist
     Then the wishlist of customer "cust1" should not contain product "prod1"
+
+  Scenario:  Add a note to product in the wishlist
+    Given wishlist is empty with id "cust1"
+    When the customer "cust1" adds product "prod1" to the wishlist
+    Then the wishlist of customer "cust1" should contain product "prod1"
+    When the customer "cust1" adds note  "note1" to "prod1" in to wishlist
+    Then the wishlist of customer "cust1" should contain product "prod1" with note "note1"

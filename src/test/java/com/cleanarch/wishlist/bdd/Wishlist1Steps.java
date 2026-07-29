@@ -20,10 +20,13 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -50,8 +53,10 @@ public class Wishlist1Steps {
     private final WishlistUseCaseImpl wishlistUseCaseImpl =
             new WishlistUseCaseImpl(wishlistRepository, wishlistPropertiesProvider);
     private Set<ProductId> productIdSet = new HashSet<>();
+    private final Map<ProductId, String> productNoteMock = new HashMap<>();
     private String customerId;
     private String productId;
+    private String productNote;
 
     @Given("wishlist is empty with id {string}")
     public void wishlist_is_empty(String id) {
@@ -112,4 +117,30 @@ public class Wishlist1Steps {
         assertFalse(allProducts.getProductIds().contains(idProduct));
     }
 
+
+    @When("the customer {string} adds note  {string} to {string} in to wishlist")
+    public void theCustomerAddsNoteToInToWishlist(String idCustomer, String idProduct, String note) {
+        customerId = idCustomer;
+        productId = idProduct;
+        productNote = note;
+
+        Wishlist wishlist = new Wishlist("id", customerId, productIdSet);
+
+        when(wishlistRepository.findByCustomerId(customerId)).thenReturn(Optional.of(wishlist));
+        wishlistUseCaseImpl.addNoteToProduct(customerId, productId, productNote);
+        productNoteMock.put(new ProductId(productId), productNote);
+
+
+    }
+
+    @Then("the wishlist of customer {string} should contain product {string} with note {string}")
+    public void theWishlistOfCustomerShouldContainProductWithNote(String idCustomer, String idProduct, String note) {
+        customerId = idCustomer;
+        productId = idProduct;
+        productNote = note;
+
+        String noteForProduct = wishlistUseCaseImpl.getNoteForProduct(customerId, productId);
+        assertEquals(productNote, noteForProduct);
+
+    }
 }

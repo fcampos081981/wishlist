@@ -99,4 +99,32 @@ public class WishlistUseCaseImpl implements WishlistUseCase {
 
         return new ProductIdsResponse(idsAsString);
     }
+
+    @Override
+    public void addNoteToProduct(String customerId, String productId, String note) {
+        validateCustomerId(customerId);
+        validateProductId(productId);
+
+        Wishlist wishlist = wishlistRepository
+                .findByCustomerId(customerId)
+                .orElseThrow(() -> new NotFoundException("Wishlist not found!"));
+
+        wishlist.addNote(new ProductId(productId), note);
+
+        wishlistRepository.save(wishlist);
+    }
+
+    @Override
+    public String getNoteForProduct(String customerId, String productId) {
+        validateCustomerId(customerId);
+        validateProductId(productId);
+
+        Wishlist wishlist = wishlistRepository
+                .findByCustomerId(customerId)
+                .orElseThrow(() -> new NotFoundException("Wishlist not found!"));
+
+        return wishlist.getNote(new ProductId(productId));
+    }
+
+
 }

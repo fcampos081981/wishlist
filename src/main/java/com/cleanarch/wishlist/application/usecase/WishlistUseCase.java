@@ -10,4 +10,8 @@ public interface WishlistUseCase {
     void removeCustomerWishlist(String customerId);
 
     ProductIdsResponse getAllProducts(String customerId);
+
+    void addNoteToProduct(String customerId, String productId, String note);
+
+    String getNoteForProduct(String customerId, String productId);
 }

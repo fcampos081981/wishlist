@@ -3,10 +3,13 @@ package com.cleanarch.wishlist.domain.entity;
 import com.cleanarch.wishlist.domain.vo.ProductId;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class WishlistTest {
 
@@ -71,5 +74,35 @@ class WishlistTest {
         Wishlist wishlist = new Wishlist("id-1", "customer-1", new HashSet<>());
 
         assertThat(wishlist.containsProduct(new ProductId("product-1"))).isFalse();
+    }
+
+    @Test
+    void addNote_shouldStoreNoteWhenProductExists() {
+        ProductId productId = new ProductId("product-1");
+        Wishlist wishlist = new Wishlist("id-1", "customer-1", new HashSet<>(Set.of(productId)));
+
+        wishlist.addNote(productId, "buy on Black Friday");
+
+        assertThat(wishlist.getProductNotes()).containsEntry(productId, "buy on Black Friday");
+    }
+
+    @Test
+    void addNote_shouldThrowWhenProductDoesNotExist() {
+        Wishlist wishlist = new Wishlist("id-1", "customer-1", new HashSet<>());
+
+        assertThatThrownBy(() -> wishlist.addNote(new ProductId("product-1"), "note"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Product not in wishlist");
+    }
+
+    @Test
+    void productNotes_settersAndGetters_shouldUpdateFields() {
+        Wishlist wishlist = new Wishlist();
+        Map<ProductId, String> notes = new HashMap<>();
+        notes.put(new ProductId("product-1"), "note-1");
+
+        wishlist.setProductNotes(notes);
+
+        assertThat(wishlist.getProductNotes()).isEqualTo(notes);
     }
 }
