@@ -7,7 +7,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Document(collection = "wishlists")
@@ -23,12 +25,20 @@ public class WishlistDocumentMongo {
 
     private Set<String> productIds = new HashSet<>();
 
+    private Map<String, String> productNotes = new HashMap<>();
+
+
     public WishlistDocumentMongo() {
     }
 
     public WishlistDocumentMongo(String id, String customerId, Set<String> productIds) {
+        this(id, customerId, productIds, new HashMap<>());
+    }
+
+    public WishlistDocumentMongo(String id, String customerId, Set<String> productIds, Map<String, String> productNotes) {
         this.id = id;
         this.customerId = customerId;
         this.productIds = productIds != null ? productIds : new HashSet<>();
+        this.productNotes = productNotes != null ? productNotes : new HashMap<>();
     }
 }

@@ -31,20 +31,31 @@ class DtoTest {
 
     @Test
     void productIdsResponseDto_shouldExposeProductIds() {
-        ProductsResponseDTO dto = new ProductsResponseDTO(Set.of("product-1"));
+        ProductsResponseDTO dto = new ProductsResponseDTO(Set.of("product-1"), Map.of("product-1", "note-1"));
         dto.setProductIds(Set.of("product-2"));
 
         assertThat(dto.getProductIds()).containsExactly("product-2");
     }
 
     @Test
+    void productIdsResponseDto_shouldExposeProductNotes() {
+        ProductsResponseDTO dto = new ProductsResponseDTO(Set.of("product-1"), Map.of("product-1", "note-1"));
+
+        assertThat(dto.getProductNotes()).containsEntry("product-1", "note-1");
+
+        dto.setProductNotes(Map.of("product-2", "note-2"));
+
+        assertThat(dto.getProductNotes()).containsEntry("product-2", "note-2");
+    }
+
+    @Test
     void responseDto_shouldExposeFields() {
-        ProductsResponseDTO data = new ProductsResponseDTO(Set.of("product-1"));
+        ProductsResponseDTO data = new ProductsResponseDTO(Set.of("product-1"), Map.of());
         ResponseDTO<ProductsResponseDTO> response = new ResponseDTO<>(data, "Success", 200);
 
         response.setMessage("Updated");
         response.setStatusCode(201);
-        response.setData(new ProductsResponseDTO(Set.of("product-2")));
+        response.setData(new ProductsResponseDTO(Set.of("product-2"), Map.of()));
 
         assertThat(response.getMessage()).isEqualTo("Updated");
         assertThat(response.getStatusCode()).isEqualTo(201);

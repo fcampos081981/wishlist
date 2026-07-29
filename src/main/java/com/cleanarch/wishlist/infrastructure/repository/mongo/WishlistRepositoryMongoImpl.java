@@ -49,6 +49,7 @@ public class WishlistRepositoryMongoImpl implements WishlistRepository {
         Query byCustomer = Query.query(Criteria.where("customerId").is(wishlist.getCustomerId()));
         Update update = new Update()
                 .set("productIds", incoming.getProductIds())
+                .set("productNotes", incoming.getProductNotes())
                 .setOnInsert("customerId", wishlist.getCustomerId())
                 .setOnInsert("_id", UUID.randomUUID().toString());
 
@@ -59,12 +60,13 @@ public class WishlistRepositoryMongoImpl implements WishlistRepository {
                 WishlistDocumentMongo.class);
 
         log.info(
-                "Wishlist salva em {}.{} -> id={}, customerId={}, productIds={}",
+                "Wishlist salva em {}.{} -> id={}, customerId={}, productIds={}, productNotes={}",
                 mongoTemplate.getDb().getName(),
                 "wishlists",
                 saved != null ? saved.getId() : null,
                 wishlist.getCustomerId(),
-                incoming.getProductIds());
+                incoming.getProductIds(),
+                incoming.getProductNotes());
 
 
     }

@@ -7,6 +7,7 @@ import com.cleanarch.wishlist.infrastructure.persistence.postgresql.WishlistEnti
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,6 +19,23 @@ class PersistenceDocumentTest {
         WishlistDocumentMongo document = new WishlistDocumentMongo();
 
         assertThat(document.getProductIds()).isNotNull().isEmpty();
+        assertThat(document.getProductNotes()).isNotNull().isEmpty();
+    }
+
+    @Test
+    void wishlistDocument_parameterizedConstructor_shouldSetProductNotes() {
+        WishlistDocumentMongo document = new WishlistDocumentMongo(
+                "id-1", "customer-1", Set.of("product-1"), Map.of("product-1", "note-1"));
+
+        assertThat(document.getProductNotes()).containsEntry("product-1", "note-1");
+    }
+
+    @Test
+    void wishlistDocument_parameterizedConstructor_shouldUseEmptyMapWhenNotesAreNull() {
+        WishlistDocumentMongo document = new WishlistDocumentMongo(
+                "id-1", "customer-1", Set.of("product-1"), null);
+
+        assertThat(document.getProductNotes()).isNotNull().isEmpty();
     }
 
     @Test
@@ -42,10 +60,12 @@ class PersistenceDocumentTest {
         document.setId("id-1");
         document.setCustomerId("customer-1");
         document.setProductIds(new HashSet<>(Set.of("product-1")));
+        document.setProductNotes(Map.of("product-1", "note-1"));
 
         assertThat(document.getId()).isEqualTo("id-1");
         assertThat(document.getCustomerId()).isEqualTo("customer-1");
         assertThat(document.getProductIds()).containsExactly("product-1");
+        assertThat(document.getProductNotes()).containsEntry("product-1", "note-1");
     }
 
     @Test
@@ -79,6 +99,7 @@ class PersistenceDocumentTest {
         assertThat(entity.getId()).isNull();
         assertThat(entity.getCustomerId()).isNull();
         assertThat(entity.getProductIds()).isNull();
+        assertThat(entity.getProductNotes()).isNotNull().isEmpty();
     }
 
     @Test
@@ -87,10 +108,12 @@ class PersistenceDocumentTest {
         entity.setId(1L);
         entity.setCustomerId("customer-1");
         entity.setProductIds(new HashSet<>(Set.of("product-1")));
+        entity.setProductNotes(Map.of("product-1", "note-1"));
 
         assertThat(entity.getId()).isEqualTo(1L);
         assertThat(entity.getCustomerId()).isEqualTo("customer-1");
         assertThat(entity.getProductIds()).containsExactly("product-1");
+        assertThat(entity.getProductNotes()).containsEntry("product-1", "note-1");
     }
 
     @Test

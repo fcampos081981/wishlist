@@ -45,4 +45,9 @@ public class WishlistController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/{customerId}/products/{productId}/notes")
+    public ResponseEntity<Void> addNote(@PathVariable String customerId, @PathVariable String productId, @RequestBody String note) {
+        wishlistUseCase.addNoteToProduct(customerId, productId, note);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 }

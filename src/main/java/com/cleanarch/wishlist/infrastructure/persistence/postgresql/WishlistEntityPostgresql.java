@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -26,5 +28,11 @@ public class WishlistEntityPostgresql {
     @CollectionTable(name = "wishlist_product", joinColumns = @JoinColumn(name = "wishlist_id"))
     @Column(name = "product_id")
     private Set<String> productIds;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "wishlist_product_note", joinColumns = @JoinColumn(name = "wishlist_id"))
+    @MapKeyColumn(name = "product_id")
+    @Column(name = "note")
+    private Map<String, String> productNotes = new HashMap<>();
 
 }

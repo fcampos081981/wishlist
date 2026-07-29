@@ -5,8 +5,10 @@ import com.cleanarch.wishlist.domain.vo.ProductId;
 import com.cleanarch.wishlist.infrastructure.persistence.WishlistMapper;
 import com.cleanarch.wishlist.infrastructure.persistence.mongo.WishlistDocumentMongo;
 import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -16,6 +18,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -116,6 +119,38 @@ class WishlistRepositoryMongoImplTest {
                 any(FindAndModifyOptions.class),
                 eq(WishlistDocumentMongo.class)
         );
+    }
+
+    @Test
+    void save_shouldPersistProductNotes() {
+        Wishlist wishlist = new Wishlist(null, CUSTOMER_ID, new HashSet<>(Set.of(new ProductId("product-1"))));
+        wishlist.addNote(new ProductId("product-1"), "note-1");
+
+        WishlistDocumentMongo incoming = new WishlistDocumentMongo(
+                null, CUSTOMER_ID, Set.of("product-1"), Map.of("product-1", "note-1"));
+
+        when(wishlistMapper.toDocument(wishlist)).thenReturn(incoming);
+        when(mongoTemplate.findAndModify(
+                any(Query.class),
+                any(Update.class),
+                any(FindAndModifyOptions.class),
+                eq(WishlistDocumentMongo.class)
+        )).thenReturn(incoming);
+        when(mongoTemplate.getDb()).thenReturn(mongoDatabase);
+        when(mongoDatabase.getName()).thenReturn("wishlist-db");
+
+        repository.save(wishlist);
+
+        ArgumentCaptor<Update> updateCaptor = ArgumentCaptor.forClass(Update.class);
+        verify(mongoTemplate).findAndModify(
+                any(Query.class),
+                updateCaptor.capture(),
+                any(FindAndModifyOptions.class),
+                eq(WishlistDocumentMongo.class)
+        );
+
+        Document set = updateCaptor.getValue().getUpdateObject().get("$set", Document.class);
+        assertThat(set.get("productNotes")).isEqualTo(Map.of("product-1", "note-1"));
     }
 
     @Test

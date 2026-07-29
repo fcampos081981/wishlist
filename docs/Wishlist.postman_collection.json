@@ -1,0 +1,117 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "Wishlist API",
+    "description": "Postman collection for WishlistController (`/api/wishlists`).\n\nEndpoints:\n- POST /{customerId}/products/{productId} — add product (201)\n- DELETE /{customerId}/products/{productId} — remove product (204)\n- DELETE /{customerId} — remove wishlist (204)\n- GET /{customerId}/products — list products and notes (200)\n- POST /{customerId}/products/{productId}/notes — add note in body (201)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:9080"
+    },
+    {
+      "key": "customerId",
+      "value": "customer-1"
+    },
+    {
+      "key": "productId",
+      "value": "product-1"
+    },
+    {
+      "key": "note",
+      "value": "buy-on-black-friday"
+    }
+  ],
+  "item": [
+    {
+      "name": "Add Product",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/wishlists/{{customerId}}/products/{{productId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wishlists", "{{customerId}}", "products", "{{productId}}"]
+        },
+        "description": "POST /api/wishlists/{customerId}/products/{productId}\n\nAdds a product to the customer's wishlist.\n\nResponse: 201 Created (empty body)."
+      },
+      "response": []
+    },
+    {
+      "name": "Remove Product",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/wishlists/{{customerId}}/products/{{productId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wishlists", "{{customerId}}", "products", "{{productId}}"]
+        },
+        "description": "DELETE /api/wishlists/{customerId}/products/{productId}\n\nRemoves a product from the customer's wishlist.\n\nResponse: 204 No Content."
+      },
+      "response": []
+    },
+    {
+      "name": "Remove Customer Wishlist",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/wishlists/{{customerId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wishlists", "{{customerId}}"]
+        },
+        "description": "DELETE /api/wishlists/{customerId}\n\nDeletes the entire wishlist for a customer.\n\nResponse: 204 No Content."
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Products",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/wishlists/{{customerId}}/products",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wishlists", "{{customerId}}", "products"]
+        },
+        "description": "GET /api/wishlists/{customerId}/products\n\nReturns all products and notes for the customer's wishlist.\n\nResponse: 200 OK\n```json\n{\n  \"data\": {\n    \"product_ids\": [\"product-1\"],\n    \"product_notes\": {\n      \"product-1\": \"buy-on-black-friday\"\n    }\n  },\n  \"message\": \"Success\",\n  \"statusCode\": 200\n}\n```"
+      },
+      "response": []
+    },
+    {
+      "name": "Add Note",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "text/plain"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{{note}}",
+          "options": {
+            "raw": {
+              "language": "text"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/wishlists/{{customerId}}/products/{{productId}}/notes",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wishlists", "{{customerId}}", "products", "{{productId}}", "notes"]
+        },
+        "description": "POST /api/wishlists/{customerId}/products/{productId}/notes\n\nAdds a note to a product already in the wishlist.\nBody: plain text (`@RequestBody String note`).\n\nResponse: 201 Created (empty body)."
+      },
+      "response": []
+    }
+  ]
+}

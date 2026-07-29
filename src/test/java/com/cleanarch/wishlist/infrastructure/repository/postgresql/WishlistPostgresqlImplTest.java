@@ -6,11 +6,13 @@ import com.cleanarch.wishlist.infrastructure.persistence.WishlistMapper;
 import com.cleanarch.wishlist.infrastructure.persistence.postgresql.WishlistEntityPostgresql;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -70,6 +72,27 @@ class WishlistPostgresqlImplTest {
         repository.save(wishlist);
 
         verify(postgresqlRepo).save(entity);
+    }
+
+    @Test
+    void save_shouldPersistProductNotes() {
+        Wishlist wishlist = new Wishlist("1", CUSTOMER_ID, new HashSet<>(Set.of(new ProductId("product-1"))));
+        wishlist.addNote(new ProductId("product-1"), "note-1");
+
+        WishlistEntityPostgresql entity = new WishlistEntityPostgresql();
+        entity.setId(1L);
+        entity.setCustomerId(CUSTOMER_ID);
+        entity.setProductIds(Set.of("product-1"));
+        entity.setProductNotes(Map.of("product-1", "note-1"));
+
+        when(wishlistMapper.toPostgresqlEntity(wishlist)).thenReturn(entity);
+
+        repository.save(wishlist);
+
+        ArgumentCaptor<WishlistEntityPostgresql> captor = ArgumentCaptor.forClass(WishlistEntityPostgresql.class);
+        verify(postgresqlRepo).save(captor.capture());
+
+        assertThat(captor.getValue().getProductNotes()).containsEntry("product-1", "note-1");
     }
 
     @Test

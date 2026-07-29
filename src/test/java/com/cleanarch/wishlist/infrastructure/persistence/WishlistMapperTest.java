@@ -7,6 +7,7 @@ import com.cleanarch.wishlist.infrastructure.persistence.postgresql.WishlistEnti
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,6 +29,34 @@ class WishlistMapperTest {
         assertThat(document.getId()).isEqualTo("id-1");
         assertThat(document.getCustomerId()).isEqualTo("customer-1");
         assertThat(document.getProductIds()).containsExactly("product-1");
+    }
+
+    @Test
+    void toDocument_shouldMapProductNotes() {
+        Wishlist wishlist = new Wishlist(
+                "id-1",
+                "customer-1",
+                new HashSet<>(Set.of(new ProductId("product-1")))
+        );
+        wishlist.addNote(new ProductId("product-1"), "note-1");
+
+        WishlistDocumentMongo document = mapper.toDocument(wishlist);
+
+        assertThat(document.getProductNotes()).containsEntry("product-1", "note-1");
+    }
+
+    @Test
+    void toDomain_shouldMapProductNotes() {
+        WishlistDocumentMongo document = new WishlistDocumentMongo(
+                "id-1",
+                "customer-1",
+                Set.of("product-1"),
+                Map.of("product-1", "note-1")
+        );
+
+        Wishlist wishlist = mapper.toDomain(document);
+
+        assertThat(wishlist.getNote(new ProductId("product-1"))).isEqualTo("note-1");
     }
 
     @Test
@@ -82,6 +111,33 @@ class WishlistMapperTest {
     }
 
     @Test
+    void toPostgresqlEntity_shouldMapProductNotes() {
+        Wishlist wishlist = new Wishlist(
+                "10",
+                "customer-1",
+                new HashSet<>(Set.of(new ProductId("product-1")))
+        );
+        wishlist.addNote(new ProductId("product-1"), "note-1");
+
+        WishlistEntityPostgresql entity = mapper.toPostgresqlEntity(wishlist);
+
+        assertThat(entity.getProductNotes()).containsEntry("product-1", "note-1");
+    }
+
+    @Test
+    void toDomainPostgresql_shouldMapProductNotes() {
+        WishlistEntityPostgresql entity = new WishlistEntityPostgresql();
+        entity.setId(10L);
+        entity.setCustomerId("customer-1");
+        entity.setProductIds(Set.of("product-1"));
+        entity.setProductNotes(Map.of("product-1", "note-1"));
+
+        Wishlist wishlist = mapper.toDomainPostgresql(entity);
+
+        assertThat(wishlist.getNote(new ProductId("product-1"))).isEqualTo("note-1");
+    }
+
+    @Test
     void toPostgresqlEntity_shouldReturnNullWhenWishlistIsNull() {
         assertThat(mapper.toPostgresqlEntity(null)).isNull();
     }
@@ -126,8 +182,8 @@ class WishlistMapperTest {
     }
 
     @Test
-    void map_shouldReturnNullWhenProductIdsAreNull() {
-        assertThat(mapper.map(null)).isNull();
+    void map_shouldReturnEmptySetWhenProductIdsAreNull() {
+        assertThat(mapper.map(null)).isEmpty();
     }
 
     @Test
@@ -141,7 +197,31 @@ class WishlistMapperTest {
     }
 
     @Test
-    void mapToProductId_shouldReturnNullWhenStringsAreNull() {
-        assertThat(mapper.mapToProductId(null)).isNull();
+    void mapToProductId_shouldReturnEmptySetWhenStringsAreNull() {
+        assertThat(mapper.mapToProductId(null)).isEmpty();
+    }
+
+    @Test
+    void mapToProductNotes_shouldConvertProductIdKeysToStrings() {
+        Map<String, String> result = mapper.mapToProductNotes(Map.of(new ProductId("product-1"), "note-1"));
+
+        assertThat(result).containsEntry("product-1", "note-1");
+    }
+
+    @Test
+    void mapToProductNotes_shouldReturnEmptyMapWhenNotesAreNull() {
+        assertThat(mapper.mapToProductNotes(null)).isEmpty();
+    }
+
+    @Test
+    void mapToProductIdNotes_shouldConvertStringKeysToProductIds() {
+        Map<ProductId, String> result = mapper.mapToProductIdNotes(Map.of("product-1", "note-1"));
+
+        assertThat(result).containsEntry(new ProductId("product-1"), "note-1");
+    }
+
+    @Test
+    void mapToProductIdNotes_shouldReturnEmptyMapWhenNotesAreNull() {
+        assertThat(mapper.mapToProductIdNotes(null)).isEmpty();
     }
 }

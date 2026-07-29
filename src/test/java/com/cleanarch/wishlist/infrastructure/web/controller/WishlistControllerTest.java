@@ -39,6 +39,8 @@ class WishlistControllerTest {
     private static final String CUSTOMER_ID = "customer-1";
     private static final String PRODUCT_ID = "product-1";
 
+    private static final String NOTE = "buy-on-black-friday";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -136,5 +138,29 @@ class WishlistControllerTest {
         mockMvc.perform(get("/api/unknown"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("The required parameter is not in the path."));
+    }
+
+    @Test
+    void addNote_shouldReturnCreated() throws Exception {
+        doNothing().when(wishlistUseCase).addNoteToProduct(CUSTOMER_ID, PRODUCT_ID, NOTE);
+
+        mockMvc.perform(post("/api/wishlists/{customerId}/products/{productId}/notes", CUSTOMER_ID, PRODUCT_ID)
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .content(NOTE))
+                .andExpect(status().isCreated());
+
+        verify(wishlistUseCase).addNoteToProduct(CUSTOMER_ID, PRODUCT_ID, NOTE);
+    }
+
+    @Test
+    void addNote_shouldReturnNotFoundWhenWishlistMissing() throws Exception {
+        doThrow(new NotFoundException("Wishlist not found!"))
+                .when(wishlistUseCase).addNoteToProduct(CUSTOMER_ID, PRODUCT_ID, NOTE);
+
+        mockMvc.perform(post("/api/wishlists/{customerId}/products/{productId}/notes", CUSTOMER_ID, PRODUCT_ID)
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .content(NOTE))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Wishlist not found!"));
     }
 }
