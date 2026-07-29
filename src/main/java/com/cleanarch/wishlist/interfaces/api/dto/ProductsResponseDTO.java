@@ -8,11 +8,11 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class ProductIdsResponseDTO {
+public class ProductsResponseDTO {
     @JsonProperty("product_ids")
     private Set<String> productIds;
 
-    public ProductIdsResponseDTO(Set<String> productIds) {
+    public ProductsResponseDTO(Set<String> productIds) {
         this.productIds = productIds;
     }
 }

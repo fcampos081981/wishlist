@@ -4,10 +4,10 @@ package com.cleanarch.wishlist.application.dto;
 
 import java.util.Set;
 
-public class ProductIdsResponse {
+public class ProductsResponse {
     private Set<String> productIds;
 
-    public ProductIdsResponse(Set<String> productIds) {
+    public ProductsResponse(Set<String> productIds) {
         this.productIds = productIds;
     }
 

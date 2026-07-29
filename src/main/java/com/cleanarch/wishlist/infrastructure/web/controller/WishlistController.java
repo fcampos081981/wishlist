@@ -1,8 +1,8 @@
-package com.cleanarch.wishlist.interfaces.api.controller;
+package com.cleanarch.wishlist.infrastructure.web.controller;
 
-import com.cleanarch.wishlist.application.dto.ProductIdsResponse;
+import com.cleanarch.wishlist.application.dto.ProductsResponse;
 import com.cleanarch.wishlist.application.usecase.WishlistUseCase;
-import com.cleanarch.wishlist.interfaces.api.dto.ProductIdsResponseDTO;
+import com.cleanarch.wishlist.interfaces.api.dto.ProductsResponseDTO;
 import com.cleanarch.wishlist.interfaces.api.dto.ResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,10 +37,10 @@ public class WishlistController {
     }
 
     @GetMapping("/{customerId}/products")
-    public ResponseEntity<ResponseDTO<ProductIdsResponseDTO>> getAllProducts(@PathVariable String customerId) {
-        ProductIdsResponse productIdsResponse = wishlistUseCase.getAllProducts(customerId);
-        ProductIdsResponseDTO dto = new ProductIdsResponseDTO(productIdsResponse.getProductIds());
-        ResponseDTO<ProductIdsResponseDTO> response =
+    public ResponseEntity<ResponseDTO<ProductsResponseDTO>> getAllProducts(@PathVariable String customerId) {
+        ProductsResponse productsResponse = wishlistUseCase.getAllProducts(customerId);
+        ProductsResponseDTO dto = new ProductsResponseDTO(productsResponse.getProductIds());
+        ResponseDTO<ProductsResponseDTO> response =
                 new ResponseDTO<>(dto, "Success", HttpStatus.OK.value());
         return ResponseEntity.ok(response);
     }

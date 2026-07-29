@@ -1,7 +1,7 @@
 package com.cleanarch.wishlist.bdd;
 
 import com.cleanarch.wishlist.application.config.WishlistPropertiesProvider;
-import com.cleanarch.wishlist.application.dto.ProductIdsResponse;
+import com.cleanarch.wishlist.application.dto.ProductsResponse;
 import com.cleanarch.wishlist.application.usecase.WishlistUseCaseImpl;
 import com.cleanarch.wishlist.domain.entity.Wishlist;
 import com.cleanarch.wishlist.domain.repositorie.WishlistRepository;
@@ -88,7 +88,7 @@ public class Wishlist1Steps {
         Wishlist wishlist = new Wishlist("id", customerId, productIdSet);
         when(wishlistRepository.findByCustomerId(customerId)).thenReturn(Optional.of(wishlist));
 
-        ProductIdsResponse allProducts = wishlistUseCaseImpl.getAllProducts(customerId);
+        ProductsResponse allProducts = wishlistUseCaseImpl.getAllProducts(customerId);
         assertTrue(allProducts.getProductIds().contains(idProduct));
     }
 
@@ -113,7 +113,7 @@ public class Wishlist1Steps {
         Wishlist wishlist = new Wishlist("id", customerId, productIdSet);
         when(wishlistRepository.findByCustomerId(customerId)).thenReturn(Optional.of(wishlist));
 
-        ProductIdsResponse allProducts = wishlistUseCaseImpl.getAllProducts(customerId);
+        ProductsResponse allProducts = wishlistUseCaseImpl.getAllProducts(customerId);
         assertFalse(allProducts.getProductIds().contains(idProduct));
     }
 

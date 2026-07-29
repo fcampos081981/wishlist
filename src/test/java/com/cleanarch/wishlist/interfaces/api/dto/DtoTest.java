@@ -1,6 +1,6 @@
 package com.cleanarch.wishlist.interfaces.api.dto;
 
-import com.cleanarch.wishlist.application.dto.ProductIdsResponse;
+import com.cleanarch.wishlist.application.dto.ProductsResponse;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -11,7 +11,7 @@ class DtoTest {
 
     @Test
     void productIdsResponse_shouldExposeProductIds() {
-        ProductIdsResponse response = new ProductIdsResponse(Set.of("product-1"));
+        ProductsResponse response = new ProductsResponse(Set.of("product-1"));
         response.setProductIds(Set.of("product-2"));
 
         assertThat(response.getProductIds()).containsExactly("product-2");
@@ -19,7 +19,7 @@ class DtoTest {
 
     @Test
     void productIdsResponseDto_shouldExposeProductIds() {
-        ProductIdsResponseDTO dto = new ProductIdsResponseDTO(Set.of("product-1"));
+        ProductsResponseDTO dto = new ProductsResponseDTO(Set.of("product-1"));
         dto.setProductIds(Set.of("product-2"));
 
         assertThat(dto.getProductIds()).containsExactly("product-2");
@@ -27,12 +27,12 @@ class DtoTest {
 
     @Test
     void responseDto_shouldExposeFields() {
-        ProductIdsResponseDTO data = new ProductIdsResponseDTO(Set.of("product-1"));
-        ResponseDTO<ProductIdsResponseDTO> response = new ResponseDTO<>(data, "Success", 200);
+        ProductsResponseDTO data = new ProductsResponseDTO(Set.of("product-1"));
+        ResponseDTO<ProductsResponseDTO> response = new ResponseDTO<>(data, "Success", 200);
 
         response.setMessage("Updated");
         response.setStatusCode(201);
-        response.setData(new ProductIdsResponseDTO(Set.of("product-2")));
+        response.setData(new ProductsResponseDTO(Set.of("product-2")));
 
         assertThat(response.getMessage()).isEqualTo("Updated");
         assertThat(response.getStatusCode()).isEqualTo(201);

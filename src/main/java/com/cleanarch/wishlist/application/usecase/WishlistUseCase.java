@@ -1,6 +1,6 @@
 package com.cleanarch.wishlist.application.usecase;
 
-import com.cleanarch.wishlist.application.dto.ProductIdsResponse;
+import com.cleanarch.wishlist.application.dto.ProductsResponse;
 
 public interface WishlistUseCase {
     void addProduct(String customerId, String productId);
@@ -9,7 +9,7 @@ public interface WishlistUseCase {
 
     void removeCustomerWishlist(String customerId);
 
-    ProductIdsResponse getAllProducts(String customerId);
+    ProductsResponse getAllProducts(String customerId);
 
     void addNoteToProduct(String customerId, String productId, String note);
 

@@ -1,7 +1,7 @@
 package com.cleanarch.wishlist.application.usecase;
 
 import com.cleanarch.wishlist.application.config.WishlistPropertiesProvider;
-import com.cleanarch.wishlist.application.dto.ProductIdsResponse;
+import com.cleanarch.wishlist.application.dto.ProductsResponse;
 import com.cleanarch.wishlist.domain.entity.Wishlist;
 import com.cleanarch.wishlist.domain.exception.BusinesException;
 import com.cleanarch.wishlist.domain.exception.NotFoundException;
@@ -192,7 +192,7 @@ class WishlistUseCaseImplTest {
         Wishlist existing = new Wishlist("id-1", CUSTOMER_ID, new HashSet<>(Set.of(new ProductId(PRODUCT_ID))));
         when(wishlistRepository.findByCustomerId(CUSTOMER_ID)).thenReturn(Optional.of(existing));
 
-        ProductIdsResponse response = wishlistUseCase.getAllProducts(CUSTOMER_ID);
+        ProductsResponse response = wishlistUseCase.getAllProducts(CUSTOMER_ID);
 
         assertThat(response.getProductIds()).containsExactly(PRODUCT_ID);
     }
@@ -201,7 +201,7 @@ class WishlistUseCaseImplTest {
     void getAllProducts_shouldReturnEmptySetWhenWishlistNotFound() {
         when(wishlistRepository.findByCustomerId(CUSTOMER_ID)).thenReturn(Optional.empty());
 
-        ProductIdsResponse response = wishlistUseCase.getAllProducts(CUSTOMER_ID);
+        ProductsResponse response = wishlistUseCase.getAllProducts(CUSTOMER_ID);
 
         assertThat(response.getProductIds()).isEmpty();
     }

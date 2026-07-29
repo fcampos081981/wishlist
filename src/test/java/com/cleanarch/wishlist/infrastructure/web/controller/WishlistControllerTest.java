@@ -1,9 +1,10 @@
-package com.cleanarch.wishlist.interfaces.api.controller;
+package com.cleanarch.wishlist.infrastructure.web.controller;
 
-import com.cleanarch.wishlist.application.dto.ProductIdsResponse;
+import com.cleanarch.wishlist.application.dto.ProductsResponse;
 import com.cleanarch.wishlist.application.usecase.WishlistUseCaseImpl;
 import com.cleanarch.wishlist.domain.exception.BusinesException;
 import com.cleanarch.wishlist.domain.exception.NotFoundException;
+import com.cleanarch.wishlist.infrastructure.web.controller.WishlistController;
 import com.cleanarch.wishlist.interfaces.handler.GlobalExceptionHandler;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,7 +108,7 @@ class WishlistControllerTest {
     @Test
     void getAllProducts_shouldReturnProducts() throws Exception {
         when(wishlistUseCase.getAllProducts(CUSTOMER_ID))
-                .thenReturn(new ProductIdsResponse(Set.of(PRODUCT_ID)));
+                .thenReturn(new ProductsResponse(Set.of(PRODUCT_ID)));
 
         mockMvc.perform(get("/api/wishlists/{customerId}/products", CUSTOMER_ID)
                         .accept(MediaType.APPLICATION_JSON))
@@ -120,7 +121,7 @@ class WishlistControllerTest {
     @Test
     void getAllProducts_shouldReturnEmptyListWhenNoProducts() throws Exception {
         when(wishlistUseCase.getAllProducts(CUSTOMER_ID))
-                .thenReturn(new ProductIdsResponse(Set.of()));
+                .thenReturn(new ProductsResponse(Set.of()));
 
         mockMvc.perform(get("/api/wishlists/{customerId}/products", CUSTOMER_ID)
                         .accept(MediaType.APPLICATION_JSON))

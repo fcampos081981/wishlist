@@ -1,7 +1,7 @@
 package com.cleanarch.wishlist.application.usecase;
 
 import com.cleanarch.wishlist.application.config.WishlistPropertiesProvider;
-import com.cleanarch.wishlist.application.dto.ProductIdsResponse;
+import com.cleanarch.wishlist.application.dto.ProductsResponse;
 import com.cleanarch.wishlist.domain.entity.Wishlist;
 import com.cleanarch.wishlist.domain.exception.BusinesException;
 import com.cleanarch.wishlist.domain.exception.NotFoundException;
@@ -85,7 +85,7 @@ public class WishlistUseCaseImpl implements WishlistUseCase {
     }
 
     @Override
-    public ProductIdsResponse getAllProducts(String customerId) {
+    public ProductsResponse getAllProducts(String customerId) {
         Optional<Wishlist> allProductsByCosyumer = wishlistRepository.findByCustomerId(customerId);
 
         Set<ProductId> ids = allProductsByCosyumer
@@ -97,7 +97,7 @@ public class WishlistUseCaseImpl implements WishlistUseCase {
                 .map(ProductId::toString)
                 .collect(Collectors.toSet());
 
-        return new ProductIdsResponse(idsAsString);
+        return new ProductsResponse(idsAsString);
     }
 
     @Override
