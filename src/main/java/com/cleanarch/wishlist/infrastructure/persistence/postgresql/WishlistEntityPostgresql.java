@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "wishlist")
-@Access(AccessType.FIELD)
+@Access(AccessType.PROPERTY)
 @Getter
 @Setter
 public class WishlistEntityPostgresql {
@@ -29,7 +29,7 @@ public class WishlistEntityPostgresql {
     @Column(name = "product_id")
     private Set<String> productIds;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "wishlist_product_note", joinColumns = @JoinColumn(name = "wishlist_id"))
     @MapKeyColumn(name = "product_id")
     @Column(name = "note")
